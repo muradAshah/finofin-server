@@ -3,238 +3,438 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Finofin.ai – Live</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <title>Finofin — Live Equity Intelligence</title>
   <style>
     :root{
-      --bg1:#061b2b;--bg2:#0a2b45;--text:#eaf4ff;--muted:#b7d3ef;
-      --door:#6b3f25;--door2:#8b5a34;--accent:#3aa7ff;
-      --shadow:0 18px 60px rgba(0,0,0,.45);
-      --radius:18px;--radius2:26px;
+      --bg1:#060e18;--bg2:#0a1a28;--text:#eaf4ff;--muted:#8aaccc;
+      --accent:#3aa7ff;--accent2:#1a6fa8;
+      /* Deep rich dark brown door palette */
+      --door-dark:#0f0703;--door-mid:#1e0f06;--door-rich:#2d1a0a;--door-light:#3d2510;
+      --door-grain:#251408;--door-trim:#4a2e14;
+      --shadow:0 24px 80px rgba(0,0,0,.6);
+      --radius:18px;--radius2:28px;
       --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Courier New",monospace;
       --sans:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial;
     }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:var(--sans);color:var(--text);
-      background:radial-gradient(1200px 700px at 20% 20%,#1c6aa8 0%,transparent 60%),
-                 radial-gradient(900px 600px at 80% 30%,#0fb0ff30 0%,transparent 55%),
-                 linear-gradient(135deg,var(--bg1),var(--bg2));
-      min-height:100vh;overflow-x:hidden;}
-    body::before{content:"";position:fixed;inset:0;
-      background:linear-gradient(to right,rgba(58,167,255,.08) 1px,transparent 1px),
-                 linear-gradient(to bottom,rgba(58,167,255,.06) 1px,transparent 1px);
-      background-size:64px 64px;
-      mask-image:radial-gradient(circle at 50% 40%,rgba(0,0,0,.85) 0%,rgba(0,0,0,.2) 55%,rgba(0,0,0,0) 80%);
-      pointer-events:none;}
-    .app{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px}
-    .card{width:min(1100px,96vw);border:1px solid rgba(58,167,255,.18);border-radius:var(--radius2);
-      background:linear-gradient(180deg,rgba(6,27,43,.55),rgba(6,27,43,.25));
-      box-shadow:var(--shadow);overflow:hidden;position:relative;}
-    .topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 22px;
-      border-bottom:1px solid rgba(58,167,255,.16);background:linear-gradient(90deg,rgba(0,0,0,.25),rgba(0,0,0,.08));}
-    .brand{display:flex;align-items:center;gap:12px}
-    .logo{width:36px;height:36px;border-radius:12px;
-      background:radial-gradient(circle at 30% 30%,#9ee1ff 0%,#3aa7ff 35%,#0b3a63 70%);
-      box-shadow:0 10px 25px rgba(58,167,255,.25);position:relative;overflow:hidden;}
-    .logo::after{content:"";position:absolute;inset:-40%;
-      background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
-      transform:rotate(25deg);animation:sheen 4s ease-in-out infinite;}
-    @keyframes sheen{0%,60%{transform:translateX(-40%) rotate(25deg);opacity:0}70%{opacity:.65}100%{transform:translateX(55%) rotate(25deg);opacity:0}}
-    .brand h1{font-size:16px;margin:0;letter-spacing:.6px;text-transform:uppercase}
-    .brand p{margin:2px 0 0;color:var(--muted);font-size:12px}
-    .chip{font-family:var(--mono);font-size:12px;padding:8px 10px;border-radius:999px;
-      border:1px solid rgba(58,167,255,.22);background:rgba(9,35,55,.35);color:var(--muted);
-      display:flex;gap:8px;align-items:center;white-space:nowrap;}
-    .dot{width:8px;height:8px;border-radius:99px;background:var(--accent);box-shadow:0 0 16px rgba(58,167,255,.6)}
-    .dot.green{background:#4ade80;box-shadow:0 0 16px rgba(74,222,128,.6)}
-    .view{display:none;padding:24px}.view.active{display:block}
-    .landing{display:grid;grid-template-columns:1.3fr 1fr;gap:20px;align-items:center;min-height:520px}
-    .headline{padding:18px}
-    .headline h2{margin:0 0 10px;font-size:42px;line-height:1.05;letter-spacing:-.6px}
-    .headline p{margin:0;max-width:60ch;color:var(--muted);font-size:14px;line-height:1.6}
-    .hint{margin-top:16px;display:flex;gap:10px;align-items:center;color:rgba(234,244,255,.9);font-size:13px}
-    .hint kbd{font-family:var(--mono);padding:3px 7px;border-radius:8px;border:1px solid rgba(58,167,255,.22);background:rgba(0,0,0,.18);color:var(--text)}
-    .doorWrap{display:flex;align-items:center;justify-content:center;padding:10px}
-    .door{width:220px;height:360px;border-radius:16px 16px 12px 12px;
-      background:linear-gradient(180deg,var(--door2),var(--door));
-      border:2px solid rgba(0,0,0,.3);box-shadow:0 22px 50px rgba(0,0,0,.5);
-      position:relative;cursor:pointer;user-select:none;transform-origin:left center;
-      transition:transform .25s ease,filter .25s ease;
-      display:flex;align-items:flex-end;justify-content:center;padding-bottom:18px;}
-    .door:hover{filter:brightness(1.05);transform:translateY(-2px)}
-    .door::before{content:"";position:absolute;inset:14px;border-radius:12px;
-      border:1px solid rgba(255,255,255,.12);
-      background:linear-gradient(90deg,rgba(255,255,255,.06),transparent 35%,rgba(0,0,0,.14)),
-                 repeating-linear-gradient(90deg,rgba(0,0,0,.08) 0,rgba(0,0,0,.08) 10px,transparent 10px,transparent 20px);
-      pointer-events:none;}
-    .knob{position:absolute;right:24px;top:50%;width:18px;height:18px;border-radius:99px;
-      background:radial-gradient(circle at 30% 30%,#ffd8a8,#c28a44);box-shadow:0 0 0 2px rgba(0,0,0,.25)}
-    .doorLabel{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.92)}
-    .enterNote{margin-top:12px;color:rgba(183,211,239,.9);font-size:12px;text-align:center}
-    .door.opening{animation:openDoor 900ms ease forwards}
-    @keyframes openDoor{0%{transform:rotateY(0)}100%{transform:rotateY(-65deg)}}
-    .overlay{position:absolute;inset:0;background:rgba(3,13,21,.65);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:10}
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{font-family:var(--sans);color:var(--text);background:var(--bg1);overflow-x:hidden}
+
+    /* ── BACKGROUND ── */
+    .bg{
+      position:fixed;inset:0;z-index:0;
+      background:
+        radial-gradient(ellipse 1400px 800px at 15% 20%,rgba(20,70,130,.35) 0%,transparent 65%),
+        radial-gradient(ellipse 900px 600px at 85% 70%,rgba(10,50,100,.2) 0%,transparent 60%),
+        linear-gradient(160deg,#060e18,#091522,#060e18);
+    }
+    .bg::after{
+      content:"";position:absolute;inset:0;
+      background:
+        linear-gradient(to right,rgba(58,167,255,.05) 1px,transparent 1px),
+        linear-gradient(to bottom,rgba(58,167,255,.04) 1px,transparent 1px);
+      background-size:72px 72px;
+      mask-image:radial-gradient(ellipse at 50% 40%,rgba(0,0,0,.7) 0%,rgba(0,0,0,.1) 60%,transparent 80%);
+    }
+
+    /* ── TOPBAR ── */
+    .topbar{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:14px 28px;
+      background:rgba(6,14,24,.85);
+      backdrop-filter:blur(20px);
+      border-bottom:1px solid rgba(58,167,255,.1);
+    }
+    .brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+    .logo-mark{
+      width:34px;height:34px;border-radius:10px;
+      background:linear-gradient(135deg,#1a6fa8,#3aa7ff,#0a3a60);
+      box-shadow:0 6px 20px rgba(58,167,255,.3);
+      display:grid;place-items:center;font-family:var(--mono);font-size:14px;font-weight:700;color:#fff;
+      letter-spacing:-.5px;
+    }
+    .brand-name{font-size:17px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--text)}
+    .brand-sub{font-size:11px;color:var(--muted);letter-spacing:.2px;margin-top:1px}
+    .status-chip{
+      font-family:var(--mono);font-size:11px;padding:6px 12px;border-radius:999px;
+      border:1px solid rgba(74,222,128,.25);background:rgba(74,222,128,.06);
+      color:rgba(74,222,128,.9);display:flex;gap:7px;align-items:center;
+    }
+    .status-dot{width:7px;height:7px;border-radius:99px;background:#4ade80;box-shadow:0 0 10px rgba(74,222,128,.8);animation:pulse 2s ease infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+    /* ── VIEWS ── */
+    .view{position:relative;z-index:1;min-height:100vh;padding-top:62px;display:none}
+    .view.active{display:block}
+
+    /* ── LANDING ── */
+    #landingView{
+      display:none;
+      align-items:center;justify-content:center;
+      min-height:100vh;
+    }
+    #landingView.active{display:flex}
+    .landing-inner{
+      display:grid;grid-template-columns:1fr 1fr;
+      gap:60px;align-items:center;
+      max-width:1000px;width:90%;padding:40px 0;
+    }
+    .landing-text h1{
+      font-size:52px;font-weight:800;line-height:1.0;letter-spacing:-1.5px;
+      margin-bottom:18px;
+    }
+    .landing-text h1 span{color:var(--accent)}
+    .landing-text p{color:var(--muted);font-size:15px;line-height:1.7;max-width:44ch;margin-bottom:24px}
+    .landing-features{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+    .feature-item{
+      display:flex;align-items:center;gap:10px;
+      font-size:13px;color:rgba(234,244,255,.8);
+    }
+    .feature-dot{width:6px;height:6px;border-radius:99px;background:var(--accent);flex-shrink:0}
+    .enter-hint{
+      display:flex;align-items:center;gap:10px;
+      font-size:13px;color:rgba(183,211,239,.7);font-family:var(--mono);
+    }
+
+    /* ── DOOR ── */
+    .door-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
+    .door{
+      width:200px;height:340px;
+      border-radius:14px 14px 8px 8px;
+      position:relative;cursor:pointer;user-select:none;
+      transform-origin:left center;
+      transition:filter .3s ease,transform .3s ease;
+      /* Deep dark wood layered gradient */
+      background:
+        linear-gradient(160deg,
+          rgba(255,255,255,.04) 0%,
+          transparent 30%,
+          rgba(0,0,0,.3) 70%,
+          rgba(0,0,0,.5) 100%),
+        repeating-linear-gradient(
+          90deg,
+          rgba(0,0,0,.08) 0px,rgba(0,0,0,.08) 3px,
+          transparent 3px,transparent 18px
+        ),
+        linear-gradient(180deg,var(--door-rich) 0%,var(--door-mid) 40%,var(--door-dark) 100%);
+      border:2px solid var(--door-trim);
+      box-shadow:
+        0 30px 80px rgba(0,0,0,.7),
+        inset 2px 0 8px rgba(255,255,255,.04),
+        inset -2px 0 8px rgba(0,0,0,.4);
+    }
+    .door:hover{filter:brightness(1.12);transform:translateY(-3px)}
+    /* Door panel inset */
+    .door::before{
+      content:"";position:absolute;
+      inset:16px 14px;
+      border-radius:8px 8px 6px 6px;
+      border:1px solid rgba(255,255,255,.07);
+      background:
+        linear-gradient(160deg,rgba(255,255,255,.05),transparent 40%,rgba(0,0,0,.2)),
+        repeating-linear-gradient(
+          90deg,
+          rgba(0,0,0,.06) 0px,rgba(0,0,0,.06) 2px,
+          transparent 2px,transparent 14px
+        ),
+        linear-gradient(180deg,rgba(61,37,16,.4),rgba(15,7,3,.6));
+      box-shadow:inset 0 2px 8px rgba(0,0,0,.4),0 1px 0 rgba(255,255,255,.04);
+    }
+    /* Upper decorative panel */
+    .door::after{
+      content:"";position:absolute;
+      top:16px;left:14px;right:14px;height:40%;
+      border-radius:8px 8px 0 0;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .door-knob{
+      position:absolute;right:20px;top:50%;
+      width:16px;height:16px;border-radius:99px;
+      background:radial-gradient(circle at 35% 30%,#ffe8b0,#d4a842,#8b6520);
+      box-shadow:0 2px 8px rgba(0,0,0,.5),inset 0 1px 2px rgba(255,255,255,.3);
+      z-index:2;
+    }
+    .door-label{
+      position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
+      font-family:var(--mono);font-size:10px;letter-spacing:.2em;
+      text-transform:uppercase;color:rgba(255,220,160,.6);z-index:2;white-space:nowrap;
+    }
+    .door-shadow{
+      width:160px;height:20px;border-radius:50%;
+      background:radial-gradient(ellipse,rgba(0,0,0,.5),transparent);
+      margin-top:-8px;
+    }
+    .door-note{font-size:12px;color:rgba(183,211,239,.5);font-family:var(--mono);letter-spacing:.05em}
+    .door.opening{animation:openDoor 800ms cubic-bezier(.4,0,.2,1) forwards}
+    @keyframes openDoor{
+      0%{transform:perspective(1200px) rotateY(0deg)}
+      100%{transform:perspective(1200px) rotateY(-70deg)}
+    }
+
+    /* ── OVERLAY ── */
+    .overlay{
+      position:fixed;inset:0;z-index:200;
+      background:rgba(4,10,18,.8);backdrop-filter:blur(10px);
+      display:none;align-items:center;justify-content:center;
+    }
     .overlay.active{display:flex}
-    .loader{width:min(520px,88vw);border:1px solid rgba(58,167,255,.22);background:rgba(7,26,41,.55);border-radius:var(--radius);padding:18px 18px 16px;box-shadow:var(--shadow)}
-    .loaderTitle{display:flex;align-items:center;gap:10px;font-family:var(--mono);color:var(--muted);font-size:12px;margin-bottom:10px;letter-spacing:.08em;text-transform:uppercase}
-    .bar{height:10px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;border:1px solid rgba(58,167,255,.15)}
-    .bar>span{display:block;height:100%;width:0%;background:linear-gradient(90deg,rgba(58,167,255,.45),rgba(158,225,255,.85));box-shadow:0 0 25px rgba(58,167,255,.45);animation:fill 2500ms ease forwards}
-    @keyframes fill{to{width:100%}}
-    .loaderSmall{margin-top:10px;color:rgba(234,244,255,.85);font-size:13px;line-height:1.5}
-    .main{display:grid;grid-template-columns:90px 1fr 90px;gap:16px;min-height:560px;align-items:stretch}
-    .side{display:flex;flex-direction:column;gap:12px;align-items:center;justify-content:center;padding:10px 6px}
-    .miniDoor{width:70px;height:140px;border-radius:14px;background:linear-gradient(180deg,var(--door2),var(--door));
-      border:1px solid rgba(0,0,0,.35);box-shadow:0 16px 30px rgba(0,0,0,.42);cursor:pointer;
-      display:flex;align-items:flex-end;justify-content:center;padding-bottom:10px;position:relative;
-      transition:transform .2s ease,filter .2s ease;user-select:none}
-    .miniDoor:hover{transform:translateY(-2px);filter:brightness(1.06)}
-    .miniDoor .knob{right:10px;width:12px;height:12px}
-    .miniDoor .doorLabel{font-size:10px;letter-spacing:.22em}
-    .profile-btn{width:54px;height:54px;border-radius:18px;border:1px solid rgba(58,167,255,.22);
-      background:rgba(9,35,55,.35);display:grid;place-items:center;cursor:pointer;
-      box-shadow:0 12px 26px rgba(0,0,0,.25);transition:transform .2s ease,filter .2s ease}
-    .profile-btn:hover{transform:translateY(-2px);filter:brightness(1.07)}
-    .center{border-radius:var(--radius);border:1px solid rgba(58,167,255,.18);
-      background:linear-gradient(180deg,rgba(11,34,53,.55),rgba(11,34,53,.25));padding:18px;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.06);display:flex;flex-direction:column;gap:14px;min-width:0}
-    .centerHeader{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding-bottom:10px;border-bottom:1px solid rgba(58,167,255,.14)}
-    .centerHeader h3{margin:0;font-size:18px;letter-spacing:.2px}
-    .centerHeader p{margin:4px 0 0;color:var(--muted);font-size:12px;line-height:1.4;max-width:64ch}
-    .pill{font-family:var(--mono);font-size:12px;color:rgba(234,244,255,.88);padding:8px 10px;
-      border-radius:999px;border:1px solid rgba(58,167,255,.20);background:rgba(0,0,0,.18);white-space:nowrap}
-    .chat{flex:1;overflow:auto;padding:4px 2px;display:flex;flex-direction:column;gap:10px;min-height:0}
-    .msg{max-width:86%;padding:12px;border-radius:16px;border:1px solid rgba(58,167,255,.14);
-      background:rgba(0,0,0,.18);box-shadow:0 12px 22px rgba(0,0,0,.18);line-height:1.45;font-size:14px;overflow-wrap:anywhere}
-    .msg.ai{align-self:flex-start;border-color:rgba(58,167,255,.22);background:rgba(9,35,55,.35)}
-    .msg.user{align-self:flex-end;background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.12)}
-    .msg small{display:block;margin-top:6px;color:rgba(183,211,239,.85);font-family:var(--mono);font-size:11px}
-    .composer{display:flex;gap:10px;padding-top:10px;border-top:1px solid rgba(58,167,255,.14)}
-    .composer input{flex:1;padding:12px;border-radius:14px;border:1px solid rgba(58,167,255,.20);
-      background:rgba(0,0,0,.18);color:var(--text);outline:none;font-size:14px;min-width:0}
-    .composer input::placeholder{color:rgba(183,211,239,.75)}
-    .composer input:disabled{opacity:.5}
-    .composer button{padding:12px 14px;border-radius:14px;border:1px solid rgba(58,167,255,.24);
-      background:rgba(58,167,255,.18);color:var(--text);cursor:pointer;font-family:var(--mono);
-      transition:transform .15s ease,filter .15s ease;white-space:nowrap}
-    .composer button:hover{transform:translateY(-1px);filter:brightness(1.08)}
-    .composer button:disabled{opacity:.4;cursor:not-allowed;transform:none}
-    .chatsPanel{position:absolute;inset:70px 18px 18px auto;width:320px;max-width:86vw;
-      border-radius:var(--radius);border:1px solid rgba(58,167,255,.22);background:rgba(7,26,41,.75);
-      box-shadow:var(--shadow);padding:14px;display:none;z-index:9}
-    .chatsPanel.active{display:block}
-    .chatsPanel h4{margin:0 0 10px;font-size:14px;letter-spacing:.2px}
-    .chatItem{padding:10px;border-radius:14px;border:1px solid rgba(58,167,255,.14);background:rgba(0,0,0,.16);margin-bottom:8px;cursor:pointer}
-    .chatItem:hover{border-color:rgba(58,167,255,.26)}
-    .chatItem div{font-size:13px;margin-bottom:3px}
-    .chatItem small{color:rgba(183,211,239,.82);font-family:var(--mono);font-size:11px}
-    .report{border:1px solid rgba(58,167,255,.18);background:rgba(0,0,0,.16);border-radius:16px;padding:12px;margin-top:6px}
-    .reportHeader{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
-    .reportHeader h4{margin:0;font-size:14px;letter-spacing:.2px}
-    .stamp{font-family:var(--mono);font-size:11px;color:rgba(183,211,239,.9);white-space:nowrap}
-    .sectionTitle{font-family:var(--mono);font-size:11px;letter-spacing:.10em;text-transform:uppercase;color:rgba(158,225,255,.92);margin:10px 0 6px}
-    .kv{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;font-size:13px;color:rgba(234,244,255,.92)}
-    .kv div{padding:8px 10px;border:1px solid rgba(58,167,255,.14);border-radius:12px;background:rgba(9,35,55,.22)}
-    .kv b{font-family:var(--mono);font-weight:700;color:rgba(234,244,255,.95)}
-    .bullets{margin:6px 0 0 0;padding-left:18px;color:rgba(234,244,255,.92);font-size:13px;line-height:1.6}
-    .bullets li{margin-bottom:8px}
-    .news-link{color:var(--accent);text-decoration:none;font-weight:600}
+    .loader-box{
+      width:min(480px,88vw);
+      border:1px solid rgba(58,167,255,.2);
+      background:rgba(8,20,34,.9);
+      border-radius:20px;padding:22px;
+      box-shadow:0 30px 80px rgba(0,0,0,.6);
+    }
+    .loader-head{display:flex;align-items:center;gap:10px;font-family:var(--mono);color:var(--muted);font-size:12px;margin-bottom:12px;letter-spacing:.08em;text-transform:uppercase}
+    .loader-bar{height:4px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden}
+    .loader-bar>span{display:block;height:100%;width:0%;
+      background:linear-gradient(90deg,var(--accent2),var(--accent));
+      animation:barfill 2800ms ease forwards}
+    @keyframes barfill{to{width:100%}}
+    .loader-text{margin-top:10px;color:rgba(234,244,255,.7);font-size:13px}
+
+    /* ── MAIN VIEW ── */
+    #mainView{display:none;flex-direction:column;min-height:100vh;padding-top:62px}
+    #mainView.active{display:flex}
+    .main-inner{flex:1;display:flex;flex-direction:column;max-width:900px;width:100%;margin:0 auto;padding:24px 24px 120px}
+
+    /* Chat header */
+    .chat-header{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:16px 0 14px;border-bottom:1px solid rgba(58,167,255,.1);margin-bottom:16px;
+    }
+    .chat-header h2{font-size:16px;font-weight:600;letter-spacing:.2px}
+    .chat-header p{font-size:12px;color:var(--muted);margin-top:2px}
+    .status-pill{
+      font-family:var(--mono);font-size:11px;color:rgba(234,244,255,.8);
+      padding:6px 12px;border-radius:999px;
+      border:1px solid rgba(58,167,255,.18);background:rgba(0,0,0,.2);white-space:nowrap;
+    }
+
+    /* Chat messages */
+    .chat{display:flex;flex-direction:column;gap:12px;flex:1}
+    .msg{
+      max-width:82%;padding:13px 15px;border-radius:18px;
+      line-height:1.5;font-size:14px;overflow-wrap:anywhere;
+    }
+    .msg.ai{
+      align-self:flex-start;
+      background:rgba(10,28,50,.6);
+      border:1px solid rgba(58,167,255,.15);
+    }
+    .msg.user{
+      align-self:flex-end;
+      background:rgba(26,111,168,.2);
+      border:1px solid rgba(58,167,255,.25);
+    }
+    .msg small{display:block;margin-top:5px;color:rgba(138,172,204,.7);font-family:var(--mono);font-size:10px}
+
+    /* Composer - fixed at bottom */
+    .composer-wrap{
+      position:fixed;bottom:0;left:0;right:0;z-index:50;
+      background:rgba(6,14,24,.95);backdrop-filter:blur(20px);
+      border-top:1px solid rgba(58,167,255,.1);
+      padding:14px 24px;
+    }
+    .composer-inner{max-width:900px;margin:0 auto;display:flex;gap:10px}
+    .composer-inner input{
+      flex:1;padding:13px 16px;border-radius:14px;
+      border:1px solid rgba(58,167,255,.2);
+      background:rgba(10,22,38,.8);
+      color:var(--text);outline:none;font-size:14px;
+      transition:border-color .2s;
+    }
+    .composer-inner input:focus{border-color:rgba(58,167,255,.5)}
+    .composer-inner input::placeholder{color:rgba(138,172,204,.5)}
+    .composer-inner input:disabled{opacity:.4}
+    .composer-inner button{
+      padding:13px 20px;border-radius:14px;
+      border:1px solid rgba(58,167,255,.3);
+      background:linear-gradient(135deg,rgba(26,111,168,.5),rgba(58,167,255,.2));
+      color:var(--text);cursor:pointer;font-family:var(--mono);font-size:13px;
+      transition:all .2s;white-space:nowrap;
+    }
+    .composer-inner button:hover{background:linear-gradient(135deg,rgba(26,111,168,.8),rgba(58,167,255,.4));transform:translateY(-1px)}
+    .composer-inner button:disabled{opacity:.3;cursor:not-allowed;transform:none}
+
+    /* ── FLOATING BACK DOOR ── */
+    .back-door{
+      position:fixed;bottom:90px;right:28px;z-index:60;
+      width:48px;height:80px;border-radius:8px 8px 5px 5px;
+      cursor:pointer;user-select:none;
+      background:
+        linear-gradient(160deg,rgba(255,255,255,.04),transparent 40%,rgba(0,0,0,.3)),
+        repeating-linear-gradient(90deg,rgba(0,0,0,.1) 0,rgba(0,0,0,.1) 2px,transparent 2px,transparent 10px),
+        linear-gradient(180deg,var(--door-rich),var(--door-dark));
+      border:1px solid var(--door-trim);
+      box-shadow:0 8px 24px rgba(0,0,0,.5);
+      display:none;align-items:flex-end;justify-content:center;padding-bottom:6px;
+      transition:transform .2s,filter .2s;
+    }
+    .back-door.visible{display:flex}
+    .back-door:hover{transform:translateY(-2px);filter:brightness(1.15)}
+    .back-door::before{
+      content:"";position:absolute;inset:5px 4px;border-radius:5px;
+      border:1px solid rgba(255,255,255,.06);
+      background:linear-gradient(180deg,rgba(61,37,16,.3),rgba(15,7,3,.4));
+    }
+    .back-door .bd-knob{
+      position:absolute;right:7px;top:45%;
+      width:7px;height:7px;border-radius:99px;
+      background:radial-gradient(circle at 35% 30%,#ffe8b0,#d4a842);
+      box-shadow:0 1px 4px rgba(0,0,0,.4);z-index:2;
+    }
+    .back-door .bd-label{
+      font-family:var(--mono);font-size:7px;letter-spacing:.12em;
+      text-transform:uppercase;color:rgba(255,220,160,.5);z-index:2;
+    }
+    .back-door-tooltip{
+      position:fixed;bottom:178px;right:28px;z-index:60;
+      background:rgba(8,20,34,.95);border:1px solid rgba(58,167,255,.2);
+      border-radius:8px;padding:6px 10px;font-size:11px;color:var(--muted);
+      font-family:var(--mono);white-space:nowrap;display:none;pointer-events:none;
+    }
+
+    /* ── REPORT STYLES ── */
+    .report{
+      border:1px solid rgba(58,167,255,.15);
+      background:rgba(8,18,32,.6);
+      border-radius:18px;padding:16px;margin-top:4px;
+      backdrop-filter:blur(4px);
+    }
+    .report-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid rgba(58,167,255,.1)}
+    .report-head h4{margin:0;font-size:15px;font-weight:700;letter-spacing:.1px}
+    .report-head .sub{color:var(--muted);font-size:11px;margin-top:3px;font-family:var(--mono)}
+    .stamp{font-family:var(--mono);font-size:10px;color:rgba(138,172,204,.6);white-space:nowrap}
+    .sec{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(100,180,255,.8);margin:14px 0 8px;display:flex;align-items:center;gap:8px}
+    .sec::after{content:"";flex:1;height:1px;background:rgba(58,167,255,.1)}
+    .kv{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;font-size:13px}
+    .kv div{padding:9px 11px;border:1px solid rgba(58,167,255,.1);border-radius:10px;background:rgba(6,14,26,.5);line-height:1.4}
+    .kv b{font-family:var(--mono);font-size:11px;font-weight:600;color:rgba(138,172,204,.8);display:block;margin-bottom:3px}
+    .kv .val{color:var(--text);font-weight:500}
+    .summary-text{color:rgba(220,238,255,.85);font-size:13px;line-height:1.65}
+    .bullets{margin:4px 0 0;padding-left:16px;font-size:13px;line-height:1.6;color:rgba(220,238,255,.85)}
+    .bullets li{margin-bottom:6px}
+    .news-item{padding:10px 12px;border:1px solid rgba(58,167,255,.1);border-radius:10px;background:rgba(6,14,26,.4);margin-bottom:6px}
+    .news-link{color:var(--accent);text-decoration:none;font-weight:600;font-size:13px;line-height:1.4;display:block;margin-bottom:4px}
     .news-link:hover{text-decoration:underline}
-    .chartBox{border:1px solid rgba(58,167,255,.14);border-radius:14px;background:rgba(9,35,55,.18);padding:10px}
-    .chartBox canvas{width:100%!important;height:220px!important}
-    .foot{padding:14px 22px;border-top:1px solid rgba(58,167,255,.14);color:rgba(183,211,239,.82);font-size:12px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
-    .err{padding:14px;border:1px solid rgba(255,80,80,.25);border-radius:14px;background:rgba(255,40,40,.08);color:rgba(255,180,180,.92);font-size:13px;line-height:1.6}
+    .news-meta{font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:4px}
+    .news-summary{font-size:12px;color:rgba(138,172,204,.8);line-height:1.5}
+
+    /* TradingView chart container */
+    .tv-chart-wrap{
+      border:1px solid rgba(58,167,255,.12);border-radius:14px;
+      overflow:hidden;background:#0a1628;height:320px;
+    }
+    .tv-chart-wrap iframe{width:100%!important;height:320px!important;border:none}
+
+    /* Analyst bars */
+    .analyst-bar-row{display:flex;gap:8px;align-items:center;font-size:12px;font-family:var(--mono);margin-bottom:5px}
+    .analyst-bar-label{width:76px;font-size:11px}
+    .analyst-bar-track{flex:1;height:4px;border-radius:4px;background:rgba(255,255,255,.06)}
+    .analyst-bar-fill{height:100%;border-radius:4px;transition:width .8s ease}
+    .analyst-bar-count{width:20px;text-align:right;color:var(--muted);font-size:11px}
+
+    .insight-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+    .insight-box{padding:10px 12px;border:1px solid rgba(58,167,255,.1);border-radius:10px;background:rgba(6,14,26,.4)}
+    .insight-box h5{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(100,180,255,.7);margin-bottom:6px}
+
     .up{color:#4ade80}.dn{color:#f87171}
-    @media(max-width:860px){
-      .landing{grid-template-columns:1fr;min-height:640px}
-      .main{grid-template-columns:1fr}
-      .side{flex-direction:row;justify-content:space-between;padding:0}
-      .miniDoor{height:100px;width:84px}
-      .chatsPanel{inset:70px 18px auto 18px;width:auto}
+    .err{padding:14px;border:1px solid rgba(255,80,80,.2);border-radius:12px;background:rgba(255,40,40,.06);color:rgba(255,180,180,.9);font-size:13px;line-height:1.6}
+
+    @media(max-width:700px){
+      .landing-inner{grid-template-columns:1fr;gap:30px;text-align:center}
+      .landing-text h1{font-size:36px}
+      .door-wrap{align-items:center}
       .kv{grid-template-columns:1fr}
-      .chartBox canvas{height:200px!important}
+      .insight-grid{grid-template-columns:1fr}
+      .back-door{bottom:82px;right:16px}
     }
   </style>
 </head>
 <body>
-<div class="app">
-  <div class="card" id="card">
-    <div class="topbar">
-      <div class="brand">
-        <div class="logo"></div>
-        <div><h1>Finofin</h1><p>Live market data · FMP API</p></div>
+
+<div class="bg"></div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <a class="brand" href="#">
+    <div class="logo-mark">ff</div>
+    <div><div class="brand-name">Finofin</div><div class="brand-sub">Live Equity Intelligence</div></div>
+  </a>
+  <div class="status-chip"><span class="status-dot"></span>Live · FMP API</div>
+</div>
+
+<!-- LANDING VIEW -->
+<section class="view" id="landingView">
+  <div class="landing-inner">
+    <div class="landing-text">
+      <h1>Your edge in<br/><span>every market</span>.</h1>
+      <p>Bloomberg-style equity reports powered by real-time market data. One search. Every number.</p>
+      <div class="landing-features">
+        <div class="feature-item"><span class="feature-dot"></span>Live price, volume & market cap</div>
+        <div class="feature-item"><span class="feature-dot"></span>Full financials, EPS & margin</div>
+        <div class="feature-item"><span class="feature-dot"></span>90-day interactive price chart</div>
+        <div class="feature-item"><span class="feature-dot"></span>Analyst ratings & price targets</div>
+        <div class="feature-item"><span class="feature-dot"></span>Live news with clickable links</div>
       </div>
-      <div class="chip"><span class="dot green"></span><span>Live · FMP connected</span></div>
+      <div class="enter-hint">↗ Click the door to enter</div>
     </div>
-
-    <section class="view landing active" id="landingView">
-      <div class="headline">
-        <h2>Welcome to <span style="color:var(--accent)">finofin</span>.</h2>
-        <p>Bloomberg-style equity reports powered by live market data. Type any ticker <em>or</em> company name — Apple, Walmart, Tesla — and get a full report in real time.</p>
-        <div class="hint"><span>Click the door to enter</span><kbd>ENTER</kbd></div>
+    <div class="door-wrap">
+      <div class="door" id="enterDoor" role="button" aria-label="Enter Finofin">
+        <div class="door-knob"></div>
+        <div class="door-label">Enter</div>
       </div>
-      <div class="doorWrap">
-        <div style="text-align:center">
-          <div class="door" id="enterDoor" role="button"><div class="knob"></div><div class="doorLabel">Enter</div></div>
-          <div class="enterNote">Click the door · live data inside</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="view main" id="mainView">
-      <div class="side">
-        <div class="miniDoor" id="exitDoor" role="button"><div class="knob"></div><div class="doorLabel">Exit</div></div>
-      </div>
-      <div class="center">
-        <div class="centerHeader">
-          <div>
-            <h3>Finofin Assistant</h3>
-            <p>Type any ticker or company name — Apple, Walmart, Tesla, Microsoft — for a live equity report.</p>
-          </div>
-          <div class="pill" id="statusPill">Waiting for your name</div>
-        </div>
-        <div class="chat" id="chat">
-          <div class="msg ai">Hello, I am Finofin. What is your name?<small>Finofin · system</small></div>
-        </div>
-        <div class="composer">
-          <input id="input" placeholder="Type your name…" autocomplete="off"/>
-          <button id="sendBtn">Send</button>
-        </div>
-      </div>
-      <div class="side">
-        <div class="miniDoor" id="chatsDoor" role="button"><div class="knob"></div><div class="doorLabel">Chats</div></div>
-        <div class="profile-btn" id="profileBtn" role="button">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-            <path d="M20 21a8 8 0 0 0-16 0" stroke="rgba(234,244,255,.92)" stroke-width="1.6" stroke-linecap="round"/>
-            <path d="M12 13a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="rgba(234,244,255,.92)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-      </div>
-    </section>
-
-    <aside class="chatsPanel" id="chatsPanel">
-      <h4>Chats (mock)</h4>
-      <div class="chatItem"><div>Intro + first report</div><small>Prototype conversation</small></div>
-      <div style="margin-top:10px;color:rgba(183,211,239,.82);font-size:12px;line-height:1.5">Saved conversations coming in the full build.</div>
-    </aside>
-
-    <div class="overlay" id="overlay">
-      <div class="loader">
-        <div class="loaderTitle"><span class="dot"></span><span id="overlayTitle">Loading</span></div>
-        <div class="bar"><span id="overlayBar"></span></div>
-        <div class="loaderSmall" id="overlayMsg">Please wait…</div>
-      </div>
+      <div class="door-shadow"></div>
+      <div class="door-note">Click to enter · live data inside</div>
     </div>
+  </div>
+</section>
 
-    <div class="foot">
-      <div>Powered by Financial Modeling Prep · live market data</div>
-      <div>Backend proxy · localhost:3000</div>
+<!-- MAIN VIEW -->
+<section id="mainView">
+  <div class="main-inner">
+    <div class="chat-header">
+      <div>
+        <h2>Finofin Assistant</h2>
+        <p>Type any ticker or company name for a full live equity report</p>
+      </div>
+      <div class="status-pill" id="statusPill">Waiting for your name</div>
     </div>
+    <div class="chat" id="chat">
+      <div class="msg ai">Hello, I am Finofin. What is your name?<small>Finofin · system</small></div>
+    </div>
+  </div>
+
+  <!-- Fixed composer -->
+  <div class="composer-wrap">
+    <div class="composer-inner">
+      <input id="input" placeholder="Type your name…" autocomplete="off"/>
+      <button id="sendBtn">Send ↑</button>
+    </div>
+  </div>
+</section>
+
+<!-- Floating back door -->
+<div class="back-door" id="backDoor" title="Back to home" role="button">
+  <div class="bd-knob"></div>
+  <div class="bd-label">Home</div>
+</div>
+
+<!-- Overlay loader -->
+<div class="overlay" id="overlay">
+  <div class="loader-box">
+    <div class="loader-head"><span class="status-dot"></span><span id="overlayTitle">Loading</span></div>
+    <div class="loader-bar"><span id="overlayBar"></span></div>
+    <div class="loader-text" id="overlayMsg">Please wait…</div>
   </div>
 </div>
 
 <script>
 const API = "https://finofin-server-production.up.railway.app/api";
 
+// ── HELPERS ───────────────────────────────────────────────────────────────────
 async function get(url) {
   try {
     const r = await fetch(url);
@@ -243,8 +443,6 @@ async function get(url) {
     return (j && j.error) ? null : j;
   } catch { return null; }
 }
-
-// ── FORMAT HELPERS ────────────────────────────────────────────────────────────
 const N   = (n,d=2) => (n!=null&&!isNaN(+n)) ? (+n).toFixed(d) : "N/A";
 const PCT = n => (n!=null&&!isNaN(+n)) ? `${(+n*100).toFixed(1)}%` : "N/A";
 const BIG = n => {
@@ -256,18 +454,14 @@ const BIG = n => {
   return `$${v.toLocaleString()}`;
 };
 
-// ── RESOLVE NAME OR TICKER → SYMBOL ──────────────────────────────────────────
+// ── RESOLVE TICKER ────────────────────────────────────────────────────────────
 async function resolveTicker(raw) {
   const input = raw.trim();
   const upper = input.toUpperCase();
-
-  // 1. Looks like a ticker — try profile directly
   if (/^[A-Za-z]{1,5}$/.test(input)) {
     const probe = await get(`${API}/profile/${upper}`);
     if (probe && Array.isArray(probe) && probe[0]?.symbol) return probe[0].symbol;
   }
-
-  // 2. Search by name (server handles common dict + FMP search)
   const results = await get(`${API}/search?q=${encodeURIComponent(input)}`);
   if (results && Array.isArray(results) && results.length > 0) {
     const lower = input.toLowerCase();
@@ -276,11 +470,10 @@ async function resolveTicker(raw) {
                || results[0];
     return match.symbol;
   }
-
   return null;
 }
 
-// ── FETCH ALL DATA ────────────────────────────────────────────────────────────
+// ── FETCH STOCK DATA ──────────────────────────────────────────────────────────
 async function fetchStockData(ticker) {
   const t = encodeURIComponent(ticker);
   const [profile, quote, income, ratios, news, hist, target, analyst] = await Promise.all([
@@ -303,7 +496,6 @@ async function fetchStockData(ticker) {
 
   if (!p.companyName && !q.name) throw new Error(`No data found for "${ticker}".`);
 
-  // Price & change
   const price     = p.price ?? q.price ?? null;
   const change    = p.change ?? q.change ?? null;
   const changePct = p.changePercentage ?? q.changePercentage ?? null;
@@ -313,35 +505,19 @@ async function fetchStockData(ticker) {
     ? `<span class="${isUp?'up':'dn'}">${sign}$${N(change)} (${sign}${N(changePct)}%)</span>`
     : "N/A";
 
-  // 52w range
   let range52w = "N/A";
   if (p.range) {
     const parts = p.range.split("-");
-    if (parts.length === 2) range52w = `$${(+parts[0]).toFixed(2)} – $${(+parts[1]).toFixed(2)}`;
+    if (parts.length >= 2) range52w = `$${(+parts[0]).toFixed(2)} – $${(+parts[parts.length-1]).toFixed(2)}`;
   }
 
-  // EPS
-  const eps = q.eps ?? i.eps ?? null;
-
-  // Valuation — try every possible field name FMP might use
-  const pe     = r.peRatioTTM ?? r.priceEarningsRatioTTM ?? r.peRatio ?? null;
-  const ps     = r.priceToSalesRatioTTM ?? r.psTTM ?? r.priceToSalesTTM ?? null;
-  const pb     = r.pbRatioTTM ?? r.priceToBookRatioTTM ?? r.priceToBookTTM ?? null;
-  const evEbit = r.evToEbitdaTTM ?? r.enterpriseValueOverEBITDATTM ?? r.evEbitdaTTM ?? r.evToEbitda ?? null;
-
-  // Chart — handle both array and {historical:[]} formats
-  let histArr = [];
-  if (hist) {
-    if (Array.isArray(hist) && hist.length > 0 && hist[0].date) {
-      // direct array format
-      histArr = [...hist].reverse().slice(0,90);
-    } else if (hist.historical && Array.isArray(hist.historical)) {
-      // v3 object format
-      histArr = [...hist.historical].reverse().slice(0,90);
-    } else if (Array.isArray(hist) && hist.length > 0) {
-      histArr = [...hist].slice(0,90);
-    }
-  }
+  const eps    = q.eps ?? i.eps ?? null;
+  const pe     = r.peRatioTTM ?? r.priceEarningsRatioTTM ?? null;
+  const ps     = r.priceToSalesRatioTTM ?? null;
+  const pb     = r.pbRatioTTM ?? r.priceToBookRatioTTM ?? null;
+  const evEbit = r.evToEbitdaTTM ?? r.enterpriseValueOverEBITDATTM ?? r.evEbitdaTTM ?? null;
+  const margin = (i.revenue && i.netIncome) ? PCT(i.netIncome / i.revenue) : "N/A";
+  const betaNote = p.beta ? (+p.beta > 1.5 ? "High volatility vs. market" : +p.beta < 0.8 ? "Lower volatility" : "Moderate sensitivity") : "N/A";
 
   // Analyst
   const strongBuy  = an.analystRatingsStrongBuy  || 0;
@@ -350,62 +526,51 @@ async function fetchStockData(ticker) {
   const sell       = an.analystRatingsSell || 0;
   const strongSell = an.analystRatingsStrongSell || 0;
   const total      = strongBuy + buy + hold + sell + strongSell;
-  const bullish    = strongBuy + buy;
   let consensus = "Hold";
   if (total > 0) {
-    const ratio = bullish / total;
+    const ratio = (strongBuy + buy) / total;
     if (ratio >= 0.8) consensus = "Strong Buy";
     else if (ratio >= 0.6) consensus = "Buy";
     else if (ratio < 0.3) consensus = "Sell";
   }
 
-  const margin   = (i.revenue && i.netIncome) ? PCT(i.netIncome / i.revenue) : "N/A";
-  const betaNote = p.beta ? (+p.beta > 1.5 ? "High volatility vs. market" : +p.beta < 0.8 ? "Lower volatility than market" : "Moderate market sensitivity") : "N/A";
-
   return {
     snapshot: {
-      ticker:    p.symbol || ticker,
-      company:   p.companyName || q.name || ticker,
-      exchange:  p.exchange || p.exchangeShortName || "N/A",
-      sector:    p.sector   || "N/A",
-      industry:  p.industry || "N/A",
-      hq:        [p.city, p.state, p.country].filter(Boolean).join(", ") || "N/A",
-      ceo:       p.ceo      || "N/A",
-      ipo:       p.ipoDate  || "N/A",
+      ticker: p.symbol || ticker, company: p.companyName || q.name || ticker,
+      exchange: p.exchange || p.exchangeShortName || "N/A",
+      sector: p.sector || "N/A", industry: p.industry || "N/A",
+      hq: [p.city, p.state, p.country].filter(Boolean).join(", ") || "N/A",
+      ceo: p.ceo || "N/A", ipo: p.ipoDate || "N/A",
       employees: p.fullTimeEmployees ? Number(p.fullTimeEmployees).toLocaleString() : "N/A",
-      website:   p.website  || null,
-      image:     p.image    || null
+      website: p.website || null, image: p.image || null
     },
     market: {
-      price:     price != null ? `$${N(price)}` : "N/A",
+      price: price != null ? `$${N(price)}` : "N/A",
       changeStr, isUp,
       marketCap: BIG(p.marketCap ?? q.marketCap),
-      volume:    BIG(p.volume ?? q.volume),
+      volume: BIG(p.volume ?? q.volume),
       avgVolume: BIG(p.averageVolume ?? q.averageVolume),
       range52w
     },
-    risk:       { beta: N(p.beta), note: betaNote },
+    risk: { beta: N(p.beta), note: betaNote },
     financials: {
-      revenueTTM:   BIG(i.revenue),
-      netIncomeTTM: BIG(i.netIncome),
-      epsTTM:       eps != null ? `$${N(eps)}` : "N/A",
-      margin
+      revenueTTM: BIG(i.revenue), netIncomeTTM: BIG(i.netIncome),
+      epsTTM: eps != null ? `$${N(eps)}` : "N/A", margin
     },
-    valuation:  { pe: N(pe), ps: N(ps), pb: N(pb), evEbitda: N(evEbit) },
-    summary:    p.description || "No description available.",
+    valuation: { pe: N(pe), ps: N(ps), pb: N(pb), evEbitda: N(evEbit) },
+    summary: p.description || "No description available.",
     news: Array.isArray(news) ? news.slice(0,5).map(n => ({
       headline: n.title || n.headline || "No title",
-      source:   n.site  || n.publisher || "Unknown",
-      date:     (n.publishedDate || n.date || "").split(" ")[0] || "N/A",
-      url:      n.url   || n.link || null,
-      summary:  (n.text || n.summary || "").slice(0,180) + "…"
+      source: n.site || n.publisher || "Unknown",
+      date: (n.publishedDate || n.date || "").split(" ")[0] || "N/A",
+      url: n.url || n.link || null,
+      summary: (n.text || n.summary || "").slice(0,180) + "…"
     })) : [],
     analyst: { consensus, total, strongBuy, buy, hold, sell, strongSell,
-      targetAvg:  pt.targetConsensus ? `$${N(pt.targetConsensus)}` : "N/A",
-      targetHigh: pt.targetHigh      ? `$${N(pt.targetHigh)}`      : "N/A",
-      targetLow:  pt.targetLow       ? `$${N(pt.targetLow)}`       : "N/A"
+      targetAvg: pt.targetConsensus ? `$${N(pt.targetConsensus)}` : "N/A",
+      targetHigh: pt.targetHigh ? `$${N(pt.targetHigh)}` : "N/A",
+      targetLow: pt.targetLow ? `$${N(pt.targetLow)}` : "N/A"
     },
-    chart:   { labels: histArr.map(d=>d.date), prices: histArr.map(d=>d.close) },
     insight: {
       drivers: [
         `Revenue (TTM): ${BIG(i.revenue)} · Net Income: ${BIG(i.netIncome)}`,
@@ -413,256 +578,309 @@ async function fetchStockData(ticker) {
         `52-Week Range: ${range52w}`
       ],
       bull: [
-        pe ? `P/E of ${N(pe)} relative to sector growth prospects` : "Strong revenue and net income fundamentals",
-        `Net income of ${BIG(i.netIncome)} with profit margin of ${margin}`
+        pe ? `P/E of ${N(pe)} — earnings valuation vs. sector` : "Strong revenue and income fundamentals",
+        `Net income ${BIG(i.netIncome)} with margin of ${margin}`
       ],
       bear: [
-        `Beta of ${N(p.beta)} — ${betaNote.toLowerCase()}`,
-        `Profit margin at ${margin} — monitor for future compression`
+        `Beta ${N(p.beta)} — ${betaNote.toLowerCase()}`,
+        `Margin at ${margin} — watch for compression`
       ],
-      watch: ["Next earnings release and forward guidance", "Macro interest rate and sector rotation", "Analyst rating revisions and institutional ownership changes"]
+      watch: ["Next earnings & forward guidance", "Macro rates & sector rotation", "Analyst revisions & institutional flows"]
     }
   };
 }
 
 // ── BUILD REPORT ──────────────────────────────────────────────────────────────
 function buildReport(data) {
-  const {snapshot:s,market:m,risk:r,financials:f,valuation:v,analyst:an} = data;
+  const {snapshot:s, market:m, risk:r, financials:f, valuation:v, analyst:an} = data;
   const li = arr => arr.map(x=>`<li>${x}</li>`).join("");
-  const cid = "c_"+Math.random().toString(36).slice(2);
+  const tvId = "tv_" + Math.random().toString(36).slice(2);
 
-  // News with clickable links
   const newsHTML = data.news.length
-    ? data.news.map(n => {
-        const headline = n.url
-          ? `<a href="${n.url}" target="_blank" rel="noopener" class="news-link">${n.headline}</a>`
-          : `<b>${n.headline}</b>`;
-        return `<li>${headline} <span style="opacity:.7">— ${n.source} · ${n.date}</span><br/><span style="opacity:.8;font-size:12px">${n.summary}</span></li>`;
-      }).join("")
-    : "<li>No recent news found.</li>";
+    ? data.news.map(n => `
+      <div class="news-item">
+        ${n.url ? `<a href="${n.url}" target="_blank" rel="noopener" class="news-link">${n.headline}</a>` : `<div class="news-link" style="color:var(--text);cursor:default">${n.headline}</div>`}
+        <div class="news-meta">${n.source} · ${n.date}</div>
+        <div class="news-summary">${n.summary}</div>
+      </div>`).join("")
+    : `<div class="news-item"><div class="news-summary">No recent news found.</div></div>`;
 
-  // Analyst bars
   const tot = an.total || 0;
-  const bar = (val, color, label) => `
-    <div style="display:flex;gap:8px;align-items:center;font-size:12px;font-family:var(--mono)">
-      <span style="color:${color};width:82px">${label}</span>
-      <div style="flex:1;height:5px;border-radius:4px;background:rgba(255,255,255,.08)">
-        <div style="width:${tot>0?((val/tot)*100).toFixed(0):0}%;height:100%;background:${color};border-radius:4px;transition:width .6s ease"></div>
-      </div>
-      <span style="color:var(--muted);width:22px;text-align:right">${val}</span>
+  const barRow = (val, color, label) => `
+    <div class="analyst-bar-row">
+      <span class="analyst-bar-label" style="color:${color}">${label}</span>
+      <div class="analyst-bar-track"><div class="analyst-bar-fill" style="width:${tot>0?((val/tot)*100).toFixed(0):0}%;background:${color}"></div></div>
+      <span class="analyst-bar-count">${val}</span>
     </div>`;
-  const analystBars = tot > 0 ? `<div style="margin-top:10px;display:grid;gap:6px">
-    ${bar(an.strongBuy,"#4ade80","Strong Buy")}
-    ${bar(an.buy,"#86efac","Buy")}
-    ${bar(an.hold,"#fbbf24","Hold")}
-    ${bar(an.sell+an.strongSell,"#f87171","Sell")}
-  </div>` : "";
 
-  const cColor = an.consensus==="Strong Buy"||an.consensus==="Buy"?"#4ade80":an.consensus==="Sell"?"#f87171":"#fbbf24";
+  const cColor = an.consensus==="Strong Buy"||an.consensus==="Buy" ? "#4ade80" : an.consensus==="Sell" ? "#f87171" : "#fbbf24";
 
   return `
-  <div class="report" data-report="1" data-ticker="${s.ticker}" data-canvas="${cid}">
-    <div class="reportHeader">
+  <div class="report" data-report="1" data-ticker="${s.ticker}" data-tvid="${tvId}">
+    <div class="report-head">
       <div style="display:flex;align-items:center;gap:10px">
-        ${s.image?`<img src="${s.image}" style="width:32px;height:32px;border-radius:8px;object-fit:contain;background:rgba(255,255,255,.06);padding:2px" onerror="this.style.display='none'"/>`:""}
+        ${s.image?`<img src="${s.image}" style="width:36px;height:36px;border-radius:8px;object-fit:contain;background:rgba(255,255,255,.05);padding:3px" onerror="this.style.display='none'"/>`:""}
         <div>
-          <h4>Finofin Report · ${s.company} (${s.ticker})</h4>
-          <div style="color:rgba(183,211,239,.9);font-size:12px;margin-top:2px">Live data · Bloomberg-style · FMP API</div>
+          <h4>${s.company} <span style="color:var(--muted);font-weight:400">(${s.ticker})</span></h4>
+          <div class="sub">${s.exchange} · ${s.sector} · Live data via FMP</div>
         </div>
       </div>
-      <div class="stamp">Generated: ${new Date().toLocaleString()}</div>
+      <div class="stamp">${new Date().toLocaleString()}</div>
     </div>
 
-    <div class="sectionTitle">1) Company Snapshot</div>
+    <div class="sec">Company Snapshot</div>
     <div class="kv">
-      <div><b>Ticker</b> ${s.ticker} (${s.exchange})</div>
-      <div><b>Sector</b> ${s.sector}</div>
-      <div><b>Industry</b> ${s.industry}</div>
-      <div><b>HQ</b> ${s.hq}</div>
-      <div><b>CEO</b> ${s.ceo}</div>
-      <div><b>IPO Date</b> ${s.ipo}</div>
-      <div><b>Employees</b> ${s.employees}</div>
-      <div><b>Website</b> ${s.website?`<a href="${s.website}" target="_blank" style="color:var(--accent)">${s.website}</a>`:"N/A"}</div>
+      <div><b>Ticker</b><span class="val">${s.ticker} (${s.exchange})</span></div>
+      <div><b>Sector</b><span class="val">${s.sector}</span></div>
+      <div><b>Industry</b><span class="val">${s.industry}</span></div>
+      <div><b>HQ</b><span class="val">${s.hq}</span></div>
+      <div><b>CEO</b><span class="val">${s.ceo}</span></div>
+      <div><b>IPO Date</b><span class="val">${s.ipo}</span></div>
+      <div><b>Employees</b><span class="val">${s.employees}</span></div>
+      <div><b>Website</b><span class="val">${s.website?`<a href="${s.website}" target="_blank" style="color:var(--accent)">${s.website}</a>`:"N/A"}</span></div>
     </div>
 
-    <div class="sectionTitle">2) Market Performance</div>
+    <div class="sec">Market Performance</div>
     <div class="kv">
-      <div><b>Price</b> ${m.price}</div>
-      <div><b>Daily Change</b> ${m.changeStr}</div>
-      <div><b>Market Cap</b> ${m.marketCap}</div>
-      <div><b>Volume</b> ${m.volume}</div>
-      <div><b>Avg Volume</b> ${m.avgVolume}</div>
-      <div><b>52W Range</b> ${m.range52w}</div>
+      <div><b>Price</b><span class="val" style="font-size:16px;font-weight:700">${m.price}</span></div>
+      <div><b>Daily Change</b><span class="val">${m.changeStr}</span></div>
+      <div><b>Market Cap</b><span class="val">${m.marketCap}</span></div>
+      <div><b>Volume</b><span class="val">${m.volume}</span></div>
+      <div><b>Avg Volume</b><span class="val">${m.avgVolume}</span></div>
+      <div><b>52W Range</b><span class="val">${m.range52w}</span></div>
     </div>
 
-    <div class="sectionTitle">3) Volatility & Risk</div>
+    <div class="sec">Volatility & Risk</div>
     <div class="kv">
-      <div><b>Beta</b> ${r.beta}</div>
-      <div><b>Risk Note</b> ${r.note}</div>
+      <div><b>Beta</b><span class="val">${r.beta}</span></div>
+      <div><b>Risk Profile</b><span class="val">${r.note}</span></div>
     </div>
 
-    <div class="sectionTitle">4) Key Financial Metrics</div>
+    <div class="sec">Key Financial Metrics</div>
     <div class="kv">
-      <div><b>Revenue (TTM)</b> ${f.revenueTTM}</div>
-      <div><b>Net Income (TTM)</b> ${f.netIncomeTTM}</div>
-      <div><b>EPS (TTM)</b> ${f.epsTTM}</div>
-      <div><b>Profit Margin</b> ${f.margin}</div>
+      <div><b>Revenue (TTM)</b><span class="val">${f.revenueTTM}</span></div>
+      <div><b>Net Income (TTM)</b><span class="val">${f.netIncomeTTM}</span></div>
+      <div><b>EPS (TTM)</b><span class="val">${f.epsTTM}</span></div>
+      <div><b>Profit Margin</b><span class="val">${f.margin}</span></div>
     </div>
 
-    <div class="sectionTitle">5) Valuation Metrics</div>
+    <div class="sec">Valuation Metrics</div>
     <div class="kv">
-      <div><b>P/E (TTM)</b> ${v.pe}</div>
-      <div><b>P/S</b> ${v.ps}</div>
-      <div><b>P/B</b> ${v.pb}</div>
-      <div><b>EV/EBITDA</b> ${v.evEbitda}</div>
+      <div><b>P/E (TTM)</b><span class="val">${v.pe}</span></div>
+      <div><b>P/S</b><span class="val">${v.ps}</span></div>
+      <div><b>P/B</b><span class="val">${v.pb}</span></div>
+      <div><b>EV/EBITDA</b><span class="val">${v.evEbitda}</span></div>
     </div>
 
-    <div class="sectionTitle">6) Business Summary</div>
-    <div style="color:rgba(234,244,255,.92);font-size:13px;line-height:1.6">${data.summary}</div>
+    <div class="sec">Business Summary</div>
+    <div class="summary-text">${data.summary}</div>
 
-    <div class="sectionTitle">7) Recent News</div>
-    <ul class="bullets">${newsHTML}</ul>
+    <div class="sec">Recent News</div>
+    ${newsHTML}
 
-    <div class="sectionTitle">8) Analyst Sentiment</div>
-    <div class="kv">
-      <div><b>Consensus</b> <span style="color:${cColor};font-weight:700">${an.consensus}</span></div>
-      <div><b>Analysts</b> ${an.total || "N/A"}</div>
-      <div><b>Avg Target</b> ${an.targetAvg}</div>
-      <div><b>High / Low</b> ${an.targetHigh} / ${an.targetLow}</div>
+    <div class="sec">Analyst Sentiment</div>
+    <div class="kv" style="margin-bottom:10px">
+      <div><b>Consensus</b><span class="val" style="color:${cColor};font-weight:700;font-size:15px">${an.consensus}</span></div>
+      <div><b>Analysts</b><span class="val">${an.total || "N/A"}</span></div>
+      <div><b>Avg Target</b><span class="val">${an.targetAvg}</span></div>
+      <div><b>High / Low</b><span class="val">${an.targetHigh} / ${an.targetLow}</span></div>
     </div>
-    ${analystBars}
+    ${tot > 0 ? `
+    <div style="padding:10px 0">
+      ${barRow(an.strongBuy,"#4ade80","Strong Buy")}
+      ${barRow(an.buy,"#86efac","Buy")}
+      ${barRow(an.hold,"#fbbf24","Hold")}
+      ${barRow(an.sell+an.strongSell,"#f87171","Sell")}
+    </div>` : ""}
 
-    <div class="sectionTitle">9) Price Chart — 90 Days (Live)</div>
-    <div class="chartBox"><canvas id="${cid}"></canvas></div>
+    <div class="sec">Price Chart — Live (TradingView)</div>
+    <div class="tv-chart-wrap" id="${tvId}"></div>
 
-    <div class="sectionTitle">10) AI Insight (Neutral)</div>
-    <div style="display:grid;gap:8px">
-      <div><b style="font-family:var(--mono)">Key Drivers</b><ul class="bullets">${li(data.insight.drivers)}</ul></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-        <div><b style="font-family:var(--mono)">Bull Case</b><ul class="bullets">${li(data.insight.bull)}</ul></div>
-        <div><b style="font-family:var(--mono)">Bear Case</b><ul class="bullets">${li(data.insight.bear)}</ul></div>
+    <div class="sec">AI Insight</div>
+    <div style="margin-bottom:8px">
+      <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;color:rgba(100,180,255,.7);letter-spacing:.1em;margin-bottom:6px">Key Drivers</div>
+      <ul class="bullets">${li(data.insight.drivers)}</ul>
+    </div>
+    <div class="insight-grid">
+      <div class="insight-box">
+        <h5>Bull Case</h5>
+        <ul class="bullets" style="padding-left:14px">${li(data.insight.bull)}</ul>
       </div>
-      <div><b style="font-family:var(--mono)">What to Watch</b><ul class="bullets">${li(data.insight.watch)}</ul></div>
+      <div class="insight-box">
+        <h5>Bear Case</h5>
+        <ul class="bullets" style="padding-left:14px">${li(data.insight.bear)}</ul>
+      </div>
+    </div>
+    <div style="margin-top:10px">
+      <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;color:rgba(100,180,255,.7);letter-spacing:.1em;margin-bottom:6px">What to Watch</div>
+      <ul class="bullets">${li(data.insight.watch)}</ul>
     </div>
 
-    <div style="margin-top:10px;color:rgba(183,211,239,.9);font-size:12px">
-      Source: Financial Modeling Prep API · ${new Date().toLocaleString()}
+    <div style="margin-top:14px;padding-top:10px;border-top:1px solid rgba(58,167,255,.08);font-family:var(--mono);font-size:10px;color:rgba(138,172,204,.5)">
+      Data: Financial Modeling Prep API · Chart: TradingView · ${new Date().toLocaleString()}
     </div>
   </div>`;
 }
 
-// ── CHART ─────────────────────────────────────────────────────────────────────
-let activeChart = null;
-function renderChart(reportEl, data) {
-  if (!reportEl) return;
-  const canvas = document.getElementById(reportEl.getAttribute("data-canvas"));
-  if (!canvas) return;
-  if (!data.chart.labels.length) {
-    canvas.parentElement.innerHTML = `<div style="color:var(--muted);font-size:13px;padding:12px;text-align:center">Chart data unavailable for this ticker.</div>`;
-    return;
-  }
-  if (activeChart) { try{activeChart.destroy();}catch(e){} activeChart=null; }
-  const ctx  = canvas.getContext("2d");
-  const first = data.chart.prices[0], last = data.chart.prices[data.chart.prices.length-1];
-  const up    = last >= first;
-  const line  = up ? "rgba(74,222,128,.9)" : "rgba(248,113,113,.9)";
-  const grad  = ctx.createLinearGradient(0,0,0,220);
-  grad.addColorStop(0, up ? "rgba(74,222,128,.2)" : "rgba(248,113,113,.2)");
-  grad.addColorStop(1,"rgba(0,0,0,0)");
-  activeChart = new Chart(ctx, {
-    type:"line",
-    data:{
-      labels:data.chart.labels,
-      datasets:[{
-        label:`${reportEl.getAttribute("data-ticker")} · 90D Close`,
-        data:data.chart.prices,
-        tension:0.35,pointRadius:0,
-        borderColor:line,borderWidth:2,
-        fill:true,backgroundColor:grad
-      }]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{
-        legend:{labels:{color:"rgba(234,244,255,.9)"}},
-        tooltip:{callbacks:{label:c=>` $${(+c.parsed.y).toFixed(2)}`}}
-      },
-      scales:{
-        x:{ticks:{color:"rgba(183,211,239,.9)",maxTicksLimit:8},grid:{color:"rgba(58,167,255,.08)"}},
-        y:{ticks:{color:"rgba(183,211,239,.9)",callback:v=>`$${(+v).toFixed(0)}`},grid:{color:"rgba(58,167,255,.08)"}}
-      }
+// ── TRADINGVIEW CHART ─────────────────────────────────────────────────────────
+function renderTVChart(tvId, ticker) {
+  const container = document.getElementById(tvId);
+  if (!container) return;
+
+  // Use TradingView's free embeddable widget
+  const script = document.createElement("script");
+  script.src = "https://s3.tradingview.com/tv.js";
+  script.onload = () => {
+    try {
+      new TradingView.widget({
+        container_id: tvId,
+        symbol: ticker,
+        interval: "D",
+        timezone: "America/New_York",
+        theme: "dark",
+        style: "2",        // Area chart — clean Bloomberg style
+        locale: "en",
+        toolbar_bg: "#0a1628",
+        enable_publishing: false,
+        hide_top_toolbar: false,
+        hide_legend: false,
+        save_image: false,
+        height: 320,
+        width: "100%",
+        studies: [],
+        show_popup_button: false,
+        popup_width: "1000",
+        popup_height: "650",
+        backgroundColor: "#0a1628",
+        gridColor: "rgba(58,167,255,0.06)",
+      });
+    } catch(e) {
+      container.innerHTML = `<div style="color:var(--muted);font-size:13px;padding:20px;text-align:center">Chart unavailable — visit TradingView.com for ${ticker}</div>`;
     }
-  });
+  };
+  script.onerror = () => {
+    container.innerHTML = `<div style="color:var(--muted);font-size:13px;padding:20px;text-align:center">Chart unavailable for this ticker.</div>`;
+  };
+  document.head.appendChild(script);
 }
 
 // ── DOOR CREAK ────────────────────────────────────────────────────────────────
-function playDoorCreak(){try{const AC=window.AudioContext||window.webkitAudioContext,ctx=new AC(),dur=0.55,t0=ctx.currentTime;const buf=ctx.createBuffer(1,ctx.sampleRate*dur,ctx.sampleRate),d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*(1-i/d.length)*0.35;const noise=ctx.createBufferSource();noise.buffer=buf;const filt=ctx.createBiquadFilter();filt.type="bandpass";filt.frequency.value=380;filt.Q.value=0.9;const osc=ctx.createOscillator();osc.type="sawtooth";osc.frequency.setValueAtTime(120,t0);osc.frequency.exponentialRampToValueAtTime(60,t0+dur);const g=ctx.createGain();g.gain.setValueAtTime(0.0001,t0);g.gain.exponentialRampToValueAtTime(0.18,t0+0.03);g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);const og=ctx.createGain();og.gain.value=0.05;noise.connect(filt);filt.connect(g);osc.connect(og);og.connect(g);g.connect(ctx.destination);noise.start(t0);osc.start(t0);noise.stop(t0+dur);osc.stop(t0+dur);setTimeout(()=>ctx.close(),900);}catch(e){}}
+function playDoorCreak() {
+  try {
+    const AC=window.AudioContext||window.webkitAudioContext,ctx=new AC(),dur=0.65,t0=ctx.currentTime;
+    const buf=ctx.createBuffer(1,ctx.sampleRate*dur,ctx.sampleRate),d=buf.getChannelData(0);
+    for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*(1-i/d.length)*0.3;
+    const noise=ctx.createBufferSource();noise.buffer=buf;
+    const filt=ctx.createBiquadFilter();filt.type="bandpass";filt.frequency.value=320;filt.Q.value=1.2;
+    const osc=ctx.createOscillator();osc.type="sawtooth";
+    osc.frequency.setValueAtTime(100,t0);osc.frequency.exponentialRampToValueAtTime(50,t0+dur);
+    const g=ctx.createGain();
+    g.gain.setValueAtTime(0.0001,t0);g.gain.exponentialRampToValueAtTime(0.15,t0+0.04);g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);
+    const og=ctx.createGain();og.gain.value=0.06;
+    noise.connect(filt);filt.connect(g);osc.connect(og);og.connect(g);g.connect(ctx.destination);
+    noise.start(t0);osc.start(t0);noise.stop(t0+dur);osc.stop(t0+dur);
+    setTimeout(()=>ctx.close(),900);
+  } catch(e){}
+}
 
 // ── DOM ───────────────────────────────────────────────────────────────────────
-const $overlay=$(".overlay");
-const $overlayTitle=$("#overlayTitle");
-const $overlayMsg=$("#overlayMsg");
-const $overlayBar=$("#overlayBar");
-const $chat=$("#chat");
-const $input=$("#input");
-const $send=$("#sendBtn");
-const $status=$("#statusPill");
-const $enterDoor=$("#enterDoor");
-const $landingView=$("#landingView");
-const $mainView=$("#mainView");
+const $overlay      = document.getElementById("overlay");
+const $overlayTitle = document.getElementById("overlayTitle");
+const $overlayMsg   = document.getElementById("overlayMsg");
+const $overlayBar   = document.getElementById("overlayBar");
+const $chat         = document.getElementById("chat");
+const $input        = document.getElementById("input");
+const $send         = document.getElementById("sendBtn");
+const $status       = document.getElementById("statusPill");
+const $enterDoor    = document.getElementById("enterDoor");
+const $landingView  = document.getElementById("landingView");
+const $mainView     = document.getElementById("mainView");
+const $backDoor     = document.getElementById("backDoor");
 
-function $(id){return document.getElementById(id)||document.querySelector(id)}
+function showOverlay(title, msg) {
+  $overlayTitle.textContent=title; $overlayMsg.textContent=msg;
+  $overlayBar.style.animation="none"; $overlayBar.offsetHeight; $overlayBar.style.animation="";
+  $overlay.classList.add("active");
+}
+function hideOverlay() { $overlay.classList.remove("active"); }
 
-function showOverlay(title,msg){$overlayTitle.textContent=title;$overlayMsg.textContent=msg;$overlayBar.style.animation="none";$overlayBar.offsetHeight;$overlayBar.style.animation="";$overlay.classList.add("active");}
-function hideOverlay(){$overlay.classList.remove("active");}
-function addHTML(html,who,meta){const d=document.createElement("div");d.className="msg "+who;d.innerHTML=html;const s=document.createElement("small");s.textContent=meta||(who==="ai"?"Finofin · live":"You");d.appendChild(s);$chat.appendChild(d);$chat.scrollTop=$chat.scrollHeight;return d;}
-function addText(text,who){const s=document.createElement("div");s.textContent=text;return addHTML(s.innerHTML,who);}
-function lock(){$input.disabled=true;$send.disabled=true;}
-function unlock(){$input.disabled=false;$send.disabled=false;$input.focus();}
+function addHTML(html, who, meta) {
+  const d=document.createElement("div"); d.className="msg "+who; d.innerHTML=html;
+  const s=document.createElement("small"); s.textContent=meta||(who==="ai"?"Finofin · live":"You");
+  d.appendChild(s); $chat.appendChild(d);
+  // Scroll to bottom
+  d.scrollIntoView({behavior:"smooth",block:"end"});
+  return d;
+}
+function addText(text, who) {
+  const s=document.createElement("div"); s.textContent=text; return addHTML(s.innerHTML,who);
+}
+function lock()   { $input.disabled=true;  $send.disabled=true; }
+function unlock() { $input.disabled=false; $send.disabled=false; $input.focus(); }
 
-let phase="name",userName="";
+function showMain() {
+  $landingView.classList.remove("active");
+  $mainView.classList.add("active");
+  $backDoor.classList.add("visible");
+  setTimeout(() => $input.focus(), 200);
+}
+function showLanding() {
+  $mainView.classList.remove("active");
+  $backDoor.classList.remove("visible");
+  $landingView.classList.add("active");
+  $enterDoor.classList.remove("opening");
+}
 
-async function handleReport(raw){
-  lock();addText(raw,"user");$input.value="";
-  showOverlay("Resolving company…",`Looking up "${raw}"…`);
+// ── CONVERSATION ──────────────────────────────────────────────────────────────
+let phase="name", userName="";
+
+async function handleReport(raw) {
+  lock(); addText(raw,"user"); $input.value="";
+  showOverlay("Resolving company…", `Looking up "${raw}"…`);
   $status.textContent=`Resolving "${raw}"…`;
+
   let ticker;
-  try{ticker=await resolveTicker(raw);}catch(e){ticker=null;}
-  if(!ticker){
+  try { ticker=await resolveTicker(raw); } catch(e) { ticker=null; }
+
+  if (!ticker) {
     hideOverlay();
     addHTML(`<div class="err"><b>Could not find "${raw}"</b><br/>Try a ticker like <b>AAPL</b>, <b>WMT</b>, <b>TSLA</b> or a name like <b>Apple</b>, <b>Walmart</b>, <b>Tesla</b>.</div>`,"ai","Finofin · error");
     $status.textContent="Could not resolve — try again";
-    unlock();return;
+    unlock(); return;
   }
-  showOverlay(`Fetching live data for ${ticker}…`,"Pulling quote, financials, news, and chart…");
+
+  showOverlay(`Fetching live data for ${ticker}…`, "Pulling quote, financials, news & analyst data…");
   $status.textContent=`Fetching ${ticker}…`;
-  try{
-    const data=await fetchStockData(ticker);
+
+  try {
+    const data = await fetchStockData(ticker);
     hideOverlay();
-    const msgEl=addHTML(buildReport(data),"ai",`Finofin · live report — ${ticker}`);
-    const reportEl=msgEl.querySelector("[data-report='1']");
-    setTimeout(()=>renderChart(reportEl,data),80);
+    const msgEl = addHTML(buildReport(data), "ai", `Finofin · live report — ${ticker}`);
+    // Render TradingView chart
+    const reportEl = msgEl.querySelector("[data-report='1']");
+    const tvId = reportEl?.getAttribute("data-tvid");
+    if (tvId) setTimeout(() => renderTVChart(tvId, ticker), 200);
     $status.textContent=`Report ready — ${ticker}`;
     addText("Report generated from live data. Enter another company anytime.","ai");
     $input.placeholder="Enter another ticker or company name…";
-  }catch(err){
+  } catch(err) {
     hideOverlay();
     addHTML(`<div class="err"><b>Error fetching ${ticker}</b><br/>${err.message}</div>`,"ai","Finofin · error");
     $status.textContent="Error — try another ticker";
   }
-  phase="ready";unlock();
+  phase="ready"; unlock();
 }
 
-function handleSend(){
-  const val=$input.value.trim();
-  if(!val||$input.disabled)return;
-  if(phase==="name"){
-    userName=val;$input.value="";addText(userName,"user");
+function handleSend() {
+  const val = $input.value.trim();
+  if (!val || $input.disabled) return;
+  if (phase==="name") {
+    userName=val; $input.value=""; addText(userName,"user");
     $status.textContent=`Hello, ${userName}`;
     setTimeout(()=>{
       addText(`Hello ${userName}, nice to meet you.`,"ai");
       setTimeout(()=>{
-        addText("I'm Finofin. Enter any stock ticker or company name — like AAPL, Walmart, Tesla, or Microsoft — and I'll pull a full live equity report.","ai");
+        addText("I'm Finofin. Enter any stock ticker or company name — like AAPL, Walmart, Tesla, or GameStop — and I'll pull a full live equity report.","ai");
         $input.placeholder="Enter a ticker or company name…";
         $status.textContent="Waiting for a company";
         phase="ticker";
@@ -673,16 +891,20 @@ function handleSend(){
   handleReport(val);
 }
 
-$send.addEventListener("click",handleSend);
-$input.addEventListener("keydown",e=>{if(e.key==="Enter")handleSend();});
-$enterDoor.addEventListener("click",()=>{
-  playDoorCreak();$enterDoor.classList.add("opening");
-  showOverlay("Entering Finofin","Loading the main experience…");
-  setTimeout(()=>{hideOverlay();$landingView.classList.remove("active");$mainView.classList.add("active");setTimeout(()=>$input.focus(),200);},1700);
+$send.addEventListener("click", handleSend);
+$input.addEventListener("keydown", e => { if(e.key==="Enter") handleSend(); });
+
+$enterDoor.addEventListener("click", () => {
+  playDoorCreak();
+  $enterDoor.classList.add("opening");
+  showOverlay("Opening the door…", "Preparing your live data terminal…");
+  setTimeout(() => { hideOverlay(); showMain(); }, 1600);
 });
-document.getElementById("exitDoor").addEventListener("click",()=>{$mainView.classList.remove("active");$landingView.classList.add("active");$enterDoor.classList.remove("opening");});
-document.getElementById("chatsDoor").addEventListener("click",()=>{document.getElementById("chatsPanel").classList.toggle("active");});
-document.getElementById("profileBtn").addEventListener("click",()=>{alert("Profile (placeholder): settings + saved reports coming later.");});
+
+$backDoor.addEventListener("click", () => showLanding());
+
+// Show landing on load
+$landingView.classList.add("active");
 </script>
 </body>
 </html>
