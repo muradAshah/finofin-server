@@ -67,17 +67,12 @@ const COMMON = {
 
 app.get("/api/search", async (req, res) => {
   try {
-    const q     = (req.query.q || "").trim().toLowerCase();
-    const upper = q.toUpperCase();
-
+    const q = (req.query.q || "").trim().toLowerCase();
     if (COMMON[q]) return res.json([{ symbol: COMMON[q], name: q }]);
-
     const stable = await fmp(`${FMP}/search?query=${encodeURIComponent(q)}&limit=8`);
     if (stable && Array.isArray(stable) && stable.length > 0) return res.json(stable);
-
     const v3 = await fmp(`${FMP_V3}/search?query=${encodeURIComponent(q)}&limit=8`);
     if (v3 && Array.isArray(v3) && v3.length > 0) return res.json(v3);
-
     res.json([]);
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
@@ -103,10 +98,20 @@ app.get("/api/income/:ticker", async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
+// Ratios TTM - primary valuation source
 app.get("/api/ratios/:ticker", async (req, res) => {
   try {
     const data = await fmp(`${FMP}/ratios-ttm?symbol=${req.params.ticker}`);
-    if (data && data[0]) console.log("RATIOS FIELDS:", Object.keys(data[0]).join(", "));
+    if (data && data[0]) console.log("RATIOS KEYS:", Object.keys(data[0]).join(", "));
+    res.json(data || []);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// Key metrics TTM - secondary valuation source (catches what ratios misses)
+app.get("/api/keymetrics/:ticker", async (req, res) => {
+  try {
+    const data = await fmp(`${FMP}/key-metrics-ttm?symbol=${req.params.ticker}`);
+    if (data && data[0]) console.log("KEYMETRICS KEYS:", Object.keys(data[0]).join(", "));
     res.json(data || []);
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
@@ -134,9 +139,19 @@ app.get("/api/target/:ticker", async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
+// Analyst consensus (buy/sell/hold counts)
 app.get("/api/analyst/:ticker", async (req, res) => {
   try {
     const data = await fmp(`${FMP}/analyst-stock-recommendations?symbol=${req.params.ticker}&limit=1`);
+    res.json(data || []);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// Individual analyst price targets with names + links (3 most recent)
+app.get("/api/analystdetail/:ticker", async (req, res) => {
+  try {
+    const data = await fmp(`${FMP}/price-target?symbol=${req.params.ticker}&limit=3`);
+    if (data && data[0]) console.log("ANALYST DETAIL KEYS:", Object.keys(data[0]).join(", "));
     res.json(data || []);
   } catch (e) { res.status(500).json({ error: e.message }); }
 });

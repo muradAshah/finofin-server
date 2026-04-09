@@ -6,17 +6,15 @@
   <title>Finofin — Live Equity Intelligence</title>
   <style>
     :root{
-      --bg1:#060e18;--bg2:#0a1a28;--text:#eaf4ff;--muted:#8aaccc;
+      --bg1:#060e18;--text:#eaf4ff;--muted:#8aaccc;
       --accent:#3aa7ff;--accent2:#1a6fa8;
-      --door-dark:#100804;--door-mid:#1c0e07;--door-rich:#2a1809;--door-light:#38220e;
-      --door-trim:#4d3015;
+      --door-dark:#100804;--door-mid:#1c0e07;--door-rich:#2a1809;--door-trim:#4d3015;
       --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Courier New",monospace;
       --sans:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial;
     }
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%;overflow-x:hidden}
     body{font-family:var(--sans);color:var(--text);background:var(--bg1)}
-
     .bg{position:fixed;inset:0;z-index:0;
       background:radial-gradient(ellipse 1400px 800px at 15% 20%,rgba(20,70,130,.35) 0%,transparent 65%),
                  radial-gradient(ellipse 900px 600px at 85% 70%,rgba(10,50,100,.2) 0%,transparent 60%),
@@ -29,24 +27,23 @@
 
     /* TOPBAR */
     .topbar{position:fixed;top:0;left:0;right:0;z-index:100;
-      display:flex;align-items:center;justify-content:space-between;padding:12px 24px;
-      background:rgba(6,14,24,.9);backdrop-filter:blur(20px);
+      display:flex;align-items:center;justify-content:space-between;padding:11px 24px;
+      background:rgba(6,14,24,.92);backdrop-filter:blur(20px);
       border-bottom:1px solid rgba(58,167,255,.1);}
     .brand{display:flex;align-items:center;gap:11px;text-decoration:none;cursor:pointer}
-    .logo-svg{width:36px;height:36px;flex-shrink:0}
     .brand-name{font-size:16px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--text)}
     .brand-sub{font-size:10px;color:var(--muted);letter-spacing:.2px;margin-top:1px}
     .topbar-right{display:flex;align-items:center;gap:10px}
     .status-chip{font-family:var(--mono);font-size:11px;padding:5px 11px;border-radius:999px;
-      border:1px solid rgba(74,222,128,.25);background:rgba(74,222,128,.06);
+      border:1px solid rgba(74,222,128,.25);background:rgba(74,222,128,.05);
       color:rgba(74,222,128,.9);display:flex;gap:6px;align-items:center;}
     .status-dot{width:6px;height:6px;border-radius:99px;background:#4ade80;
       box-shadow:0 0 10px rgba(74,222,128,.8);animation:pulse 2s ease infinite}
     @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-    .history-btn{background:rgba(58,167,255,.1);border:1px solid rgba(58,167,255,.2);
+    .history-btn{background:rgba(58,167,255,.08);border:1px solid rgba(58,167,255,.18);
       border-radius:8px;padding:5px 11px;font-family:var(--mono);font-size:11px;
       color:var(--muted);cursor:pointer;transition:all .2s;}
-    .history-btn:hover{background:rgba(58,167,255,.2);color:var(--text)}
+    .history-btn:hover{background:rgba(58,167,255,.18);color:var(--text)}
 
     /* VIEWS */
     #landingView{position:relative;z-index:1;min-height:100vh;padding-top:62px;
@@ -63,9 +60,9 @@
     .landing-text h1 span{color:var(--accent)}
     .landing-text p{color:var(--muted);font-size:14px;line-height:1.7;max-width:42ch;margin-bottom:22px}
     .landing-features{display:flex;flex-direction:column;gap:9px;margin-bottom:26px}
-    .feature-item{display:flex;align-items:center;gap:9px;font-size:13px;color:rgba(234,244,255,.8);}
-    .feature-dot{width:5px;height:5px;border-radius:99px;background:var(--accent);flex-shrink:0}
-    .enter-hint{font-size:12px;color:rgba(138,172,204,.6);font-family:var(--mono)}
+    .fi{display:flex;align-items:center;gap:9px;font-size:13px;color:rgba(234,244,255,.8);}
+    .fd{width:5px;height:5px;border-radius:99px;background:var(--accent);flex-shrink:0}
+    .enter-hint{font-size:12px;color:rgba(138,172,204,.55);font-family:var(--mono)}
 
     /* DOOR */
     .door-wrap{display:flex;flex-direction:column;align-items:center;gap:12px}
@@ -80,21 +77,17 @@
       border:2px solid var(--door-trim);
       box-shadow:0 30px 80px rgba(0,0,0,.75),inset 2px 0 6px rgba(255,255,255,.03),inset -3px 0 8px rgba(0,0,0,.5);}
     .door:hover{filter:brightness(1.15);transform:translateY(-4px)}
-    /* Upper panel */
     .door-panel-top{position:absolute;top:14px;left:12px;right:12px;height:38%;
       border-radius:6px;border:1px solid rgba(255,255,255,.06);
       background:linear-gradient(160deg,rgba(255,200,100,.03),transparent 40%,rgba(0,0,0,.25));
       box-shadow:inset 0 2px 6px rgba(0,0,0,.4);}
-    /* Lower panel */
     .door-panel-bot{position:absolute;bottom:40px;left:12px;right:12px;height:36%;
       border-radius:6px;border:1px solid rgba(255,255,255,.05);
       background:linear-gradient(160deg,rgba(255,200,100,.02),transparent 40%,rgba(0,0,0,.2));
       box-shadow:inset 0 2px 6px rgba(0,0,0,.35);}
-    /* Vertical center divide */
     .door-divide{position:absolute;top:14px;bottom:40px;left:50%;width:1px;
       background:linear-gradient(180deg,transparent,rgba(255,255,255,.05) 30%,rgba(255,255,255,.05) 70%,transparent);}
-    .door-knob{position:absolute;right:18px;top:50%;
-      width:14px;height:14px;border-radius:99px;
+    .door-knob{position:absolute;right:18px;top:50%;width:14px;height:14px;border-radius:99px;
       background:radial-gradient(circle at 35% 30%,#ffe8b0,#d4a842,#8b6520);
       box-shadow:0 2px 8px rgba(0,0,0,.6),inset 0 1px 2px rgba(255,255,255,.4);z-index:2;}
     .door-label{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);
@@ -102,7 +95,7 @@
       color:rgba(255,220,160,.5);z-index:2;white-space:nowrap;}
     .door-shadow{width:140px;height:16px;border-radius:50%;
       background:radial-gradient(ellipse,rgba(0,0,0,.55),transparent);margin-top:-6px;}
-    .door-note{font-size:11px;color:rgba(138,172,204,.45);font-family:var(--mono);letter-spacing:.04em}
+    .door-note{font-size:11px;color:rgba(138,172,204,.4);font-family:var(--mono);letter-spacing:.04em}
     .door.opening{animation:openDoor 750ms cubic-bezier(.4,0,.2,1) forwards}
     @keyframes openDoor{0%{transform:perspective(1000px) rotateY(0deg)}100%{transform:perspective(1000px) rotateY(-72deg)}}
 
@@ -122,7 +115,7 @@
     @keyframes barfill{to{width:100%}}
     .loader-text{margin-top:10px;color:rgba(234,244,255,.6);font-size:13px}
 
-    /* MAIN VIEW */
+    /* MAIN */
     .main-inner{flex:1;display:flex;flex-direction:column;
       max-width:860px;width:100%;margin:0 auto;padding:20px 20px 100px;}
     .chat-header{display:flex;align-items:flex-start;justify-content:space-between;
@@ -138,7 +131,7 @@
     .msg{max-width:84%;padding:12px 14px;border-radius:16px;line-height:1.5;font-size:13.5px;overflow-wrap:anywhere}
     .msg.ai{align-self:flex-start;background:rgba(10,26,48,.7);border:1px solid rgba(58,167,255,.13);}
     .msg.user{align-self:flex-end;background:rgba(26,111,168,.18);border:1px solid rgba(58,167,255,.22);}
-    .msg small{display:block;margin-top:4px;color:rgba(138,172,204,.6);font-family:var(--mono);font-size:10px}
+    .msg small{display:block;margin-top:4px;color:rgba(138,172,204,.55);font-family:var(--mono);font-size:10px}
 
     /* COMPOSER */
     .composer-wrap{position:fixed;bottom:0;left:0;right:0;z-index:50;
@@ -149,7 +142,7 @@
       border:1px solid rgba(58,167,255,.18);background:rgba(10,22,38,.85);
       color:var(--text);outline:none;font-size:13.5px;transition:border-color .2s;}
     .composer-inner input:focus{border-color:rgba(58,167,255,.45)}
-    .composer-inner input::placeholder{color:rgba(138,172,204,.45)}
+    .composer-inner input::placeholder{color:rgba(138,172,204,.4)}
     .composer-inner input:disabled{opacity:.35}
     .composer-inner button{padding:12px 18px;border-radius:12px;
       border:1px solid rgba(58,167,255,.28);
@@ -171,41 +164,41 @@
     .back-door:hover{transform:translateY(-2px);filter:brightness(1.2)}
     .back-door::before{content:"";position:absolute;inset:4px 3px;border-radius:4px;
       border:1px solid rgba(255,255,255,.05);}
-    .back-door .bd-knob{position:absolute;right:6px;top:44%;width:6px;height:6px;
+    .bd-knob{position:absolute;right:6px;top:44%;width:6px;height:6px;
       border-radius:99px;background:radial-gradient(circle at 35% 30%,#ffe8b0,#d4a842);z-index:2;}
-    .back-door .bd-label{font-family:var(--mono);font-size:6px;letter-spacing:.14em;
+    .bd-label{font-family:var(--mono);font-size:6px;letter-spacing:.14em;
       text-transform:uppercase;color:rgba(255,220,160,.45);z-index:2;}
 
     /* HISTORY PANEL */
-    .history-panel{position:fixed;top:62px;right:0;bottom:0;width:300px;z-index:80;
+    .history-panel{position:fixed;top:62px;right:0;bottom:0;width:290px;z-index:80;
       background:rgba(6,14,24,.97);backdrop-filter:blur(20px);
       border-left:1px solid rgba(58,167,255,.12);
       padding:16px;display:none;flex-direction:column;gap:10px;overflow-y:auto;}
     .history-panel.open{display:flex}
-    .history-panel h3{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px}
-    .history-panel .hp-sub{font-size:11px;color:var(--muted);margin-bottom:10px}
-    .chat-card{border:1px solid rgba(58,167,255,.12);border-radius:12px;
-      background:rgba(10,22,38,.6);padding:11px 12px;cursor:pointer;transition:all .2s;}
-    .chat-card:hover{border-color:rgba(58,167,255,.28);background:rgba(10,22,38,.9)}
+    .history-panel h3{font-size:13px;font-weight:600}
+    .hp-sub{font-size:11px;color:var(--muted);margin-bottom:2px}
+    .chat-card{border:1px solid rgba(58,167,255,.12);border-radius:11px;
+      background:rgba(10,22,38,.6);padding:10px 12px;cursor:pointer;transition:all .2s;margin-bottom:6px;}
+    .chat-card:hover{border-color:rgba(58,167,255,.28)}
     .chat-card.active-card{border-color:rgba(58,167,255,.4)}
-    .chat-card-name{font-size:13px;font-weight:500;margin-bottom:3px;display:flex;align-items:center;justify-content:space-between}
-    .chat-card-meta{font-size:11px;color:var(--muted);font-family:var(--mono)}
-    .chat-card-del{font-size:11px;color:rgba(248,113,113,.7);cursor:pointer;padding:2px 5px;border-radius:4px}
-    .chat-card-del:hover{color:#f87171;background:rgba(248,113,113,.1)}
-    .new-chat-btn{width:100%;padding:10px;border-radius:10px;border:1px dashed rgba(58,167,255,.2);
+    .cc-name{font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
+    .cc-meta{font-size:10px;color:var(--muted);font-family:var(--mono)}
+    .cc-del{font-size:11px;color:rgba(248,113,113,.65);cursor:pointer;padding:2px 5px;border-radius:4px;flex-shrink:0}
+    .cc-del:hover{color:#f87171;background:rgba(248,113,113,.1)}
+    .new-chat-btn{width:100%;padding:9px;border-radius:9px;border:1px dashed rgba(58,167,255,.18);
       background:transparent;color:var(--muted);font-family:var(--mono);font-size:11px;
       cursor:pointer;transition:all .2s;}
-    .new-chat-btn:hover{border-color:rgba(58,167,255,.4);color:var(--text)}
-    .rename-input{width:100%;padding:6px 8px;border-radius:7px;border:1px solid rgba(58,167,255,.2);
-      background:rgba(0,0,0,.25);color:var(--text);font-size:12px;outline:none;margin-top:4px;}
+    .new-chat-btn:hover{border-color:rgba(58,167,255,.38);color:var(--text)}
+    .rename-input{width:100%;padding:5px 7px;border-radius:6px;border:1px solid rgba(58,167,255,.2);
+      background:rgba(0,0,0,.3);color:var(--text);font-size:12px;outline:none;margin-top:3px;}
 
     /* REPORT */
     .report{border:1px solid rgba(58,167,255,.13);background:rgba(8,18,32,.65);
-      border-radius:16px;padding:14px;margin-top:4px;backdrop-filter:blur(4px);}
-    .report-head{display:flex;align-items:flex-start;justify-content:space-between;
+      border-radius:16px;padding:14px;margin-top:4px;}
+    .rhead{display:flex;align-items:flex-start;justify-content:space-between;
       gap:10px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(58,167,255,.09);}
-    .report-head h4{margin:0;font-size:14px;font-weight:700}
-    .report-head .sub{color:var(--muted);font-size:10px;margin-top:2px;font-family:var(--mono)}
+    .rhead h4{margin:0;font-size:14px;font-weight:700}
+    .rhead .sub{color:var(--muted);font-size:10px;margin-top:2px;font-family:var(--mono)}
     .stamp{font-family:var(--mono);font-size:9px;color:rgba(138,172,204,.5);white-space:nowrap}
     .sec{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
       color:rgba(100,180,255,.75);margin:12px 0 7px;display:flex;align-items:center;gap:7px;}
@@ -214,36 +207,36 @@
     .kv div{padding:8px 10px;border:1px solid rgba(58,167,255,.09);border-radius:9px;background:rgba(6,14,26,.55);line-height:1.4}
     .kv b{font-family:var(--mono);font-size:10px;font-weight:600;color:rgba(138,172,204,.75);display:block;margin-bottom:2px}
     .kv .val{color:var(--text);font-weight:500}
-    .summary-text{color:rgba(220,238,255,.82);font-size:13px;line-height:1.65}
-    .bullets{margin:4px 0 0;padding-left:15px;font-size:13px;line-height:1.6;color:rgba(220,238,255,.82)}
-    .bullets li{margin-bottom:5px}
-    .news-item{padding:9px 11px;border:1px solid rgba(58,167,255,.09);border-radius:9px;
-      background:rgba(6,14,26,.4);margin-bottom:5px;}
-    .news-link{color:var(--accent);text-decoration:none;font-weight:600;font-size:13px;
-      line-height:1.4;display:block;margin-bottom:3px;}
-    .news-link:hover{text-decoration:underline}
-    .news-meta{font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:3px}
-    .news-summary{font-size:11.5px;color:rgba(138,172,204,.75);line-height:1.5}
-    .tv-wrap{border:1px solid rgba(58,167,255,.1);border-radius:12px;overflow:hidden;
-      background:#0a1628;height:300px;position:relative;}
-    .tv-wrap iframe,.tv-wrap>div{width:100%!important;height:300px!important}
-    .analyst-row{display:flex;gap:7px;align-items:center;font-size:11px;font-family:var(--mono);margin-bottom:4px}
-    .analyst-label{width:72px;font-size:10px}
-    .analyst-track{flex:1;height:4px;border-radius:4px;background:rgba(255,255,255,.06)}
-    .analyst-fill{height:100%;border-radius:4px;transition:width .8s ease}
-    .analyst-count{width:18px;text-align:right;color:var(--muted);font-size:10px}
-    .insight-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
-    .insight-box{padding:9px 11px;border:1px solid rgba(58,167,255,.09);border-radius:9px;background:rgba(6,14,26,.4)}
-    .insight-box h5{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(100,180,255,.65);margin-bottom:5px}
+    .stext{color:rgba(220,238,255,.82);font-size:13px;line-height:1.65}
+    .blist{margin:4px 0 0;padding-left:15px;font-size:13px;line-height:1.6;color:rgba(220,238,255,.82)}
+    .blist li{margin-bottom:5px}
+    .ni{padding:9px 11px;border:1px solid rgba(58,167,255,.09);border-radius:9px;background:rgba(6,14,26,.4);margin-bottom:5px;}
+    .nl{color:var(--accent);text-decoration:none;font-weight:600;font-size:13px;line-height:1.4;display:block;margin-bottom:3px;}
+    .nl:hover{text-decoration:underline}
+    .nm{font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:3px}
+    .ns{font-size:11.5px;color:rgba(138,172,204,.75);line-height:1.5}
+    .tv-wrap{border:1px solid rgba(58,167,255,.1);border-radius:12px;overflow:hidden;background:#0a1628;height:300px;}
+    .ar{display:flex;gap:7px;align-items:center;font-size:11px;font-family:var(--mono);margin-bottom:4px}
+    .al{width:72px;font-size:10px}.at{flex:1;height:4px;border-radius:4px;background:rgba(255,255,255,.06)}
+    .af{height:100%;border-radius:4px;transition:width .8s ease}
+    .ac{width:18px;text-align:right;color:var(--muted);font-size:10px}
+    .ig{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+    .ib{padding:9px 11px;border:1px solid rgba(58,167,255,.09);border-radius:9px;background:rgba(6,14,26,.4)}
+    .ib h5{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(100,180,255,.65);margin-bottom:5px}
+    .analyst-link-item{padding:8px 10px;border:1px solid rgba(58,167,255,.1);border-radius:8px;background:rgba(6,14,26,.4);margin-bottom:5px;}
+    .analyst-link-item .an{font-size:12px;font-weight:600;color:var(--text)}
+    .analyst-link-item .af2{font-family:var(--mono);font-size:10px;color:var(--muted);margin:2px 0}
+    .analyst-link-item .at2{color:var(--accent);text-decoration:none;font-size:11px;}
+    .analyst-link-item .at2:hover{text-decoration:underline}
     .up{color:#4ade80}.dn{color:#f87171}
     .err{padding:12px;border:1px solid rgba(255,80,80,.18);border-radius:11px;background:rgba(255,40,40,.05);color:rgba(255,180,180,.88);font-size:13px;line-height:1.6}
-    .qa-answer{padding:12px 14px;border-left:2px solid var(--accent);background:rgba(58,167,255,.05);border-radius:0 10px 10px 0;font-size:13px;line-height:1.65;color:rgba(220,238,255,.9)}
+    .qa{padding:12px 14px;border-left:2px solid var(--accent);background:rgba(58,167,255,.05);border-radius:0 10px 10px 0;font-size:13px;line-height:1.65;color:rgba(220,238,255,.9)}
 
     @media(max-width:700px){
       .landing-inner{grid-template-columns:1fr;gap:28px;text-align:center}
       .landing-text h1{font-size:34px}
       .kv{grid-template-columns:1fr}
-      .insight-grid{grid-template-columns:1fr}
+      .ig{grid-template-columns:1fr}
       .history-panel{width:100%}
     }
   </style>
@@ -254,20 +247,30 @@
 <!-- TOPBAR -->
 <div class="topbar">
   <div class="brand" id="brandLink">
-    <!-- SVG Logo: ff with stock-line through middle bars -->
-    <svg class="logo-svg" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="36" height="36" rx="9" fill="url(#logoGrad)"/>
-      <!-- Left F -->
-      <text x="3" y="25" font-family="ui-monospace,monospace" font-size="20" font-weight="800" fill="rgba(255,255,255,0.9)">f</text>
-      <!-- Right F -->
-      <text x="17" y="25" font-family="ui-monospace,monospace" font-size="20" font-weight="800" fill="rgba(255,255,255,0.9)">f</text>
-      <!-- Stock chart line through middle bars of both f's -->
-      <polyline points="4,19 8,15 12,18 16,13 20,16 24,11 28,14 32,10"
-        stroke="#4ade80" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <!-- Logo: ff with stock chart line as the crossbar of both letters -->
+    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="36" height="36" rx="9" fill="#0d1e33"/>
+      <rect x="0" y="0" width="36" height="36" rx="9" fill="url(#lg1)"/>
+      <!-- Left F: vertical stroke -->
+      <rect x="4.5" y="6" width="2.5" height="22" rx="1" fill="rgba(234,244,255,0.88)"/>
+      <!-- Left F: top bar -->
+      <rect x="4.5" y="6" width="10" height="2.5" rx="1" fill="rgba(234,244,255,0.88)"/>
+      <!-- Right F: vertical stroke -->
+      <rect x="19.5" y="6" width="2.5" height="22" rx="1" fill="rgba(234,244,255,0.88)"/>
+      <!-- Right F: top bar -->
+      <rect x="19.5" y="6" width="12" height="2.5" rx="1" fill="rgba(234,244,255,0.88)"/>
+      <!-- THE CROSSBAR OF BOTH F's = ONE RISING STOCK CHART LINE -->
+      <!-- Line passes through the mid-crossbar zone (y≈16) of left F, bridges gap, then through right F, rising left to right -->
+      <polyline
+        points="4.5,18 7,15.5 9.5,17 12,14.5 14.5,16 19.5,17.5 22,14.5 24.5,16.5 27,13 29.5,15 32,11.5"
+        stroke="#4ade80" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <!-- Small glow dots at peaks for sophistication -->
+      <circle cx="12" cy="14.5" r="1.2" fill="#4ade80" opacity="0.7"/>
+      <circle cx="27" cy="13" r="1.2" fill="#4ade80" opacity="0.7"/>
       <defs>
-        <linearGradient id="logoGrad" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#0d2d50"/>
-          <stop offset="100%" stop-color="#081e38"/>
+        <linearGradient id="lg1" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#0f2540"/>
+          <stop offset="100%" stop-color="#081828"/>
         </linearGradient>
       </defs>
     </svg>
@@ -279,23 +282,24 @@
   </div>
 </div>
 
-<!-- LANDING VIEW -->
+<!-- LANDING -->
 <section id="landingView">
   <div class="landing-inner">
     <div class="landing-text">
       <h1>Your edge in<br/><span>every market</span>.</h1>
-      <p>Bloomberg-style equity reports powered by real-time data. One search. Every number.</p>
+      <p>Bloomberg-style equity reports powered by real-time data. Enter any ticker and get the full picture instantly.</p>
       <div class="landing-features">
-        <div class="feature-item"><span class="feature-dot"></span>Live price, volume & market cap</div>
-        <div class="feature-item"><span class="feature-dot"></span>Full financials, EPS & valuation</div>
-        <div class="feature-item"><span class="feature-dot"></span>Interactive TradingView price chart</div>
-        <div class="feature-item"><span class="feature-dot"></span>Analyst ratings & price targets</div>
-        <div class="feature-item"><span class="feature-dot"></span>Ask Finofin financial questions</div>
+        <div class="fi"><span class="fd"></span>Live price, volume, market cap & 52-week range</div>
+        <div class="fi"><span class="fd"></span>Full income statement — revenue, EPS & margins</div>
+        <div class="fi"><span class="fd"></span>Valuation ratios — P/E, P/S, P/B, EV/EBITDA</div>
+        <div class="fi"><span class="fd"></span>Interactive TradingView price chart</div>
+        <div class="fi"><span class="fd"></span>Analyst ratings with clickable research links</div>
+        <div class="fi"><span class="fd"></span>Ask Finofin financial questions anytime</div>
       </div>
       <div class="enter-hint">↗ Click the door to enter</div>
     </div>
     <div class="door-wrap">
-      <div class="door" id="enterDoor" role="button" aria-label="Enter Finofin">
+      <div class="door" id="enterDoor" role="button">
         <div class="door-panel-top"></div>
         <div class="door-panel-bot"></div>
         <div class="door-divide"></div>
@@ -314,7 +318,7 @@
     <div class="chat-header">
       <div class="chat-header-left">
         <h2>Finofin Assistant</h2>
-        <p>Enter any ticker, company name, or ask a financial question</p>
+        <p>Enter any ticker or company name · Ask financial questions like "what is beta?"</p>
       </div>
       <div class="status-pill" id="statusPill">Ready</div>
     </div>
@@ -329,7 +333,7 @@
 </section>
 
 <!-- BACK DOOR -->
-<div class="back-door" id="backDoor" title="Return to home" role="button">
+<div class="back-door" id="backDoor" title="Return home" role="button">
   <div class="bd-knob"></div>
   <div class="bd-label">Home</div>
 </div>
@@ -337,7 +341,7 @@
 <!-- HISTORY PANEL -->
 <div class="history-panel" id="historyPanel">
   <h3>Saved Chats</h3>
-  <div class="hp-sub">Up to 3 chats. Click to load, rename or delete.</div>
+  <div class="hp-sub">Up to 3 chats. Double-click name to rename.</div>
   <div id="chatList"></div>
   <button class="new-chat-btn" id="newChatBtn">+ New Chat</button>
 </div>
@@ -363,104 +367,97 @@ async function get(url) {
     return (j && j.error) ? null : j;
   } catch { return null; }
 }
-const N   = (n,d=2) => (n!=null&&!isNaN(+n)) ? (+n).toFixed(d) : "N/A";
+const N   = (n,d=2) => (n!=null&&!isNaN(+n)&&+n!==0) ? (+n).toFixed(d) : "N/A";
 const PCT = n => (n!=null&&!isNaN(+n)) ? `${(+n*100).toFixed(1)}%` : "N/A";
 const BIG = n => {
   if(n==null||isNaN(+n)) return "N/A";
-  const v=+n, a=Math.abs(v);
+  const v=+n,a=Math.abs(v);
   if(a>=1e12) return `$${(v/1e12).toFixed(2)}T`;
   if(a>=1e9)  return `$${(v/1e9).toFixed(2)}B`;
   if(a>=1e6)  return `$${(v/1e6).toFixed(2)}M`;
+  if(a>=1e3)  return `$${(v/1e3).toFixed(1)}K`;
   return `$${v.toLocaleString()}`;
 };
+// pick first non-null/non-zero from a list of values
+const FIRST = (...vals) => {
+  for(const v of vals) if(v!=null && !isNaN(+v) && +v!==0) return v;
+  return null;
+};
 
-// ── FINANCIAL Q&A ─────────────────────────────────────────────────────────────
+// ── Q&A KNOWLEDGE BASE ────────────────────────────────────────────────────────
 const QA = [
-  { keys:["what is beta","what does beta","beta mean","explain beta","beta represent"],
-    answer:"<b>Beta</b> measures how volatile a stock is compared to the overall market (S&P 500 = 1.0). A beta of 1.5 means the stock moves ~50% more than the market — higher risk, higher potential return. Beta below 1.0 means it moves less than the market (more stable). Negative beta (rare) means it moves opposite the market, like gold." },
-  { keys:["what is alpha","what does alpha","alpha mean","explain alpha"],
-    answer:"<b>Alpha</b> is a measure of an investment's performance compared to a benchmark index. Positive alpha (+2) means the investment outperformed the benchmark by 2%. Negative alpha means it underperformed. Portfolio managers are paid to generate alpha — beating the market after accounting for risk." },
-  { keys:["what is a security","what is security","define security","explain security"],
-    answer:"A <b>security</b> is any tradable financial asset — stocks (equity securities), bonds (debt securities), ETFs, options, and futures all qualify. When people say 'a security' in finance, they usually mean a stock or bond. The SEC (Securities and Exchange Commission) regulates all securities in the US." },
-  { keys:["what is pe","what is p/e","price to earnings","pe ratio","p/e ratio"],
-    answer:"<b>P/E (Price-to-Earnings)</b> ratio = stock price ÷ earnings per share. It tells you how much investors pay for each $1 of earnings. A P/E of 25 means investors pay $25 for every $1 earned. High P/E = high growth expectations. Low P/E = value stock or slow growth. Average S&P 500 P/E is historically ~16-20." },
-  { keys:["what is market cap","market capitalization","what does market cap"],
-    answer:"<b>Market Cap</b> = share price × total shares outstanding. It's the total market value of a company. Large cap: $10B+, Mid cap: $2–10B, Small cap: $300M–2B, Micro cap: under $300M. Market cap determines index inclusion — Apple (~$3T) is the largest US company by market cap." },
-  { keys:["what is eps","earnings per share","what does eps"],
-    answer:"<b>EPS (Earnings Per Share)</b> = net income ÷ total shares outstanding. It shows how much profit a company generates per share. Higher EPS = more profitable. TTM EPS uses the last 12 months of data. Forward EPS uses analyst estimates for the next 12 months." },
-  { keys:["what is ev/ebitda","ebitda","enterprise value"],
-    answer:"<b>EV/EBITDA</b> compares a company's total value (Enterprise Value = market cap + debt − cash) to its earnings before interest, taxes, depreciation, and amortization. It's useful for comparing companies with different debt levels. Lower EV/EBITDA generally means a cheaper valuation." },
-  { keys:["what is a ticker","what is a stock ticker","ticker symbol"],
-    answer:"A <b>ticker symbol</b> is a unique abbreviation used to identify a publicly traded company on a stock exchange. AAPL = Apple, TSLA = Tesla, MSFT = Microsoft. NYSE and NASDAQ tickers can be 1–4 letters. They're assigned when a company goes public (IPO) and rarely change." },
-  { keys:["what is short selling","what is shorting","short a stock","short sell"],
-    answer:"<b>Short selling</b> is betting that a stock's price will fall. You borrow shares, sell them at the current price, wait for the price to drop, then buy them back cheaper and pocket the difference. It's high-risk because losses are theoretically unlimited (a stock can rise infinitely). GameStop's 2021 squeeze famously destroyed short sellers." },
-  { keys:["what is a dividend","dividends","dividend yield"],
-    answer:"A <b>dividend</b> is a portion of a company's profits paid to shareholders, usually quarterly. <b>Dividend yield</b> = annual dividend ÷ stock price. A 3% yield on a $100 stock means you receive $3/year per share. Companies like Coca-Cola and Johnson & Johnson are known for consistent dividends." },
-  { keys:["what is volatility","implied volatility","historical volatility"],
-    answer:"<b>Volatility</b> measures how much a stock's price moves. High volatility = larger price swings (NVDA, TSLA). Low volatility = stable price (KO, JNJ). <b>Historical volatility</b> looks at past price movements. <b>Implied volatility</b> (from options markets) reflects expected future movement. VIX is the market's 'fear index.'" },
-  { keys:["what is the difference between stocks and bonds","stocks vs bonds","stock vs bond"],
-    answer:"<b>Stocks</b> = ownership in a company. You share in profits (and losses). Higher risk, higher potential return. <b>Bonds</b> = loans to a company or government. You receive fixed interest payments. Lower risk, lower return. A classic portfolio balance is 60% stocks / 40% bonds, though this shifts based on risk tolerance and age." },
-  { keys:["what is an ipo","initial public offering","what does ipo mean"],
-    answer:"An <b>IPO (Initial Public Offering)</b> is when a private company first sells shares to the public on a stock exchange. It's how companies raise capital and how early investors cash out. IPO pricing is set by investment banks. The first day of trading often sees big price swings as the market discovers the 'real' price." },
-  { keys:["what is ps ratio","price to sales","p/s ratio"],
-    answer:"<b>P/S (Price-to-Sales)</b> = market cap ÷ annual revenue. Useful for valuing companies with no profits yet (early-stage tech). A P/S of 8 means investors pay $8 for every $1 of sales. Lower P/S = potentially undervalued. High-growth companies often trade at high P/S ratios." },
-  { keys:["what is pb ratio","price to book","p/b ratio"],
-    answer:"<b>P/B (Price-to-Book)</b> = stock price ÷ book value per share. Book value is a company's assets minus liabilities — what it's worth 'on paper.' P/B below 1.0 means the stock trades for less than its assets, often indicating deep value or financial trouble. Warren Buffett has historically favored low P/B stocks." },
-  { keys:["what is hedging","hedge","how to hedge"],
-    answer:"<b>Hedging</b> is taking an offsetting position to reduce risk. If you own Apple stock, buying put options on Apple hedges against a price drop. Funds hedge by holding positions that profit when others lose. It's insurance for your portfolio — it costs money but limits downside." },
-  { keys:["what is a bull market","bull market","bullish"],
-    answer:"A <b>bull market</b> is a sustained period of rising stock prices — generally a 20%+ rise from recent lows. It's associated with strong economic growth, low unemployment, and investor confidence. The US bull market from 2009–2020 was the longest in history. <b>Bullish</b> means you expect prices to rise." },
-  { keys:["what is a bear market","bear market","bearish"],
-    answer:"A <b>bear market</b> is a sustained decline of 20%+ from recent highs. It's associated with economic slowdowns, recessions, or financial crises. 2008–2009 and early 2020 were recent bear markets. <b>Bearish</b> means you expect prices to fall." },
+  { keys:["what is beta","what does beta","beta mean","explain beta","beta represent","relevance of beta","why beta","beta matter","beta important","role of beta","beta tell","how does beta work"],
+    answer:"<b>Beta</b> measures how volatile a stock is compared to the overall market (S&P 500 = 1.0). A beta of 1.5 means the stock moves ~50% more than the market — higher risk, higher potential return. Beta below 1.0 means it moves less (more stable). Negative beta means it moves opposite the market, like gold. <b>Why it matters:</b> beta helps investors understand the risk profile of a stock relative to the broader market and is a core input in the Capital Asset Pricing Model (CAPM)." },
+  { keys:["what is alpha","what does alpha","alpha mean","explain alpha","alpha represent","relevance of alpha","why alpha","alpha matter","alpha important","role of alpha","why is alpha","alpha tell","what role does alpha","significance of alpha","how does alpha work","alpha in investing","alpha in finance"],
+    answer:"<b>Alpha</b> measures an investment's return above what the market would predict given its risk level. Alpha of +3 means the investment outperformed expectations by 3%; negative alpha means it underperformed. <b>Why it matters:</b> alpha is the holy grail for fund managers — it represents true skill vs. just riding market momentum. If a fund has consistently positive alpha, the manager is genuinely adding value beyond what chance or market exposure explains. Investors pay premium fees for alpha-generating managers." },
+  { keys:["what is a security","what is security","define security","explain security","what are securities"],
+    answer:"A <b>security</b> is any tradable financial asset. This includes stocks (equity securities), bonds (debt securities), ETFs, options, futures, and mutual fund shares. When people say 'a security' in finance, they usually mean a stock or bond. The SEC (Securities and Exchange Commission) regulates all securities in the US. Securities give holders certain rights — equity securities give ownership rights, debt securities give creditor rights." },
+  { keys:["what is pe","what is p/e","price to earnings","pe ratio","p/e ratio","explain pe","what does pe mean","why pe matters","relevance of pe"],
+    answer:"<b>P/E (Price-to-Earnings)</b> = stock price ÷ earnings per share. It tells you how much investors pay for $1 of earnings. A P/E of 25 means investors pay $25 for every $1 earned. <b>Why it matters:</b> high P/E signals high growth expectations (tech companies often trade at 30-50x). Low P/E suggests a value stock or stagnant growth. The S&P 500 historical average is ~16-20x. Comparing P/E to industry peers and historical averages reveals whether a stock is over or undervalued." },
+  { keys:["what is market cap","market capitalization","what does market cap","explain market cap","why market cap"],
+    answer:"<b>Market Cap</b> = share price × total shares outstanding. It's the total market value of a company. <b>Large cap:</b> $10B+ (Apple, Microsoft), <b>Mid cap:</b> $2–10B, <b>Small cap:</b> $300M–2B, <b>Micro cap:</b> under $300M. Why it matters: market cap determines index inclusion, institutional interest, and liquidity. Large caps are generally more stable; small caps offer higher growth potential with higher risk." },
+  { keys:["what is eps","earnings per share","what does eps","explain eps","why eps matters","relevance of eps"],
+    answer:"<b>EPS (Earnings Per Share)</b> = net income ÷ total shares outstanding. It shows how much profit the company generates per share. <b>Why it matters:</b> EPS growth is one of the strongest drivers of stock price appreciation over time. Analysts estimate future EPS and stocks often move sharply when actual EPS beats or misses those estimates — this is called an earnings surprise." },
+  { keys:["what is ev ebitda","what is ev/ebitda","ebitda","enterprise value","explain ebitda","what does ebitda"],
+    answer:"<b>EV/EBITDA</b> = Enterprise Value (market cap + debt − cash) ÷ EBITDA (earnings before interest, taxes, depreciation, and amortization). <b>Why it matters:</b> unlike P/E, EV/EBITDA accounts for debt and is better for comparing companies with different capital structures. It's the go-to valuation metric in M&A and private equity. A lower EV/EBITDA generally means cheaper valuation relative to operating earnings." },
+  { keys:["what is short selling","what is shorting","short a stock","short sell","explain short selling","how does shorting work"],
+    answer:"<b>Short selling</b> means borrowing shares and selling them, hoping to buy them back cheaper later to profit on the decline. <b>Why it matters:</b> shorts provide price discovery and can expose fraud. But risk is theoretically unlimited since a stock can rise infinitely. GameStop's 2021 short squeeze saw heavily shorted stocks rocket as retail buyers forced shorts to cover at massive losses." },
+  { keys:["what is a dividend","dividends","dividend yield","explain dividends","why dividends matter"],
+    answer:"A <b>dividend</b> is a portion of profits paid to shareholders, usually quarterly. <b>Dividend yield</b> = annual dividend ÷ stock price. A 3% yield on a $100 stock means $3/year per share. <b>Why it matters:</b> dividends provide income regardless of stock price movement and signal financial health and confidence. Companies with long dividend growth histories (Dividend Aristocrats) are often considered blue-chip quality investments." },
+  { keys:["what is volatility","implied volatility","historical volatility","explain volatility","why volatility matters"],
+    answer:"<b>Volatility</b> measures how much and how quickly a stock's price moves. Historical volatility looks backward at actual price swings; implied volatility (from options) reflects market expectations of future movement. VIX is the market's 'fear index.' <b>Why it matters:</b> higher volatility means higher risk AND higher potential return. Options pricing is entirely based on volatility — high IV means expensive options." },
+  { keys:["what is a bull market","bull market","bullish","explain bull market"],
+    answer:"A <b>bull market</b> is a sustained period of rising stock prices — broadly defined as a 20%+ rise from recent lows. It's associated with economic expansion, low unemployment, and investor confidence. The 2009–2020 bull market was the longest in US history. <b>Bullish</b> describes an investor who expects prices to rise." },
+  { keys:["what is a bear market","bear market","bearish","explain bear market"],
+    answer:"A <b>bear market</b> is a sustained decline of 20%+ from recent highs, typically accompanied by economic slowdown or recession fears. 2008–2009, early 2020, and 2022 were recent bear markets. <b>Bearish</b> describes an investor who expects prices to fall. Bear markets average about 289 days historically." },
+  { keys:["what is an ipo","initial public offering","what does ipo mean","explain ipo"],
+    answer:"An <b>IPO (Initial Public Offering)</b> is when a private company first sells shares to the public on a stock exchange. <b>Why it matters:</b> IPOs raise capital for growth and allow early investors/founders to cash out. Investment banks underwrite IPOs and set initial pricing. The first trading day often sees extreme volatility as the market discovers the real price. Notable recent IPOs include Airbnb, Coinbase, and Rivian." },
+  { keys:["what is ps ratio","price to sales","p/s ratio","explain ps","what does ps mean"],
+    answer:"<b>P/S (Price-to-Sales)</b> = market cap ÷ annual revenue. <b>Why it matters:</b> useful for valuing companies with no profits yet — early-stage tech, biotech, growth companies. A P/S of 8 means investors pay $8 for every $1 of sales. Lower P/S generally means cheaper. A P/S above 10 typically requires very high growth expectations to justify." },
+  { keys:["what is pb ratio","price to book","p/b ratio","explain pb","book value"],
+    answer:"<b>P/B (Price-to-Book)</b> = stock price ÷ book value per share. Book value = assets minus liabilities. <b>Why it matters:</b> P/B below 1.0 means the stock trades below its net asset value — often signals deep value or distress. Warren Buffett has historically favored low P/B stocks. Financial companies (banks, insurance) are especially compared by P/B." },
+  { keys:["what is hedging","hedge a portfolio","how to hedge","explain hedging"],
+    answer:"<b>Hedging</b> is taking an offsetting position to reduce risk. If you own Apple stock, buying put options on Apple hedges against a price drop. <b>Why it matters:</b> hedging is portfolio insurance — it costs money (premium) but limits downside. Large institutions, pension funds, and endowments all use hedging strategies. Perfect hedges are rare; most hedging reduces but doesn't eliminate risk." },
+  { keys:["what is liquidity","liquid stock","market liquidity","explain liquidity"],
+    answer:"<b>Liquidity</b> describes how easily a security can be bought or sold without significantly moving its price. High liquidity = large trading volume, tight bid-ask spreads (Apple, Microsoft). Low liquidity = thin markets, large price impact from trades (penny stocks, some OTC securities). <b>Why it matters:</b> institutional investors need liquid markets to enter/exit large positions. Illiquid positions carry a 'liquidity premium' — higher expected return to compensate for the difficulty of selling." },
+  { keys:["what is a ticker","stock ticker","ticker symbol","what does ticker mean"],
+    answer:"A <b>ticker symbol</b> is the unique abbreviation identifying a publicly traded company on a stock exchange. AAPL = Apple, TSLA = Tesla, MSFT = Microsoft, GME = GameStop. NYSE tickers use 1–3 letters; NASDAQ typically uses 4. Tickers are assigned at IPO and rarely change unless a company merges, gets acquired, or rebrands." },
+  { keys:["what is capm","capital asset pricing model","explain capm"],
+    answer:"<b>CAPM (Capital Asset Pricing Model)</b> calculates the expected return of an investment based on its systematic risk (beta). Formula: Expected Return = Risk-Free Rate + Beta × (Market Return − Risk-Free Rate). <b>Why it matters:</b> CAPM is the foundation of modern portfolio theory. It defines the relationship between risk and expected return, and is used to price assets, value companies, and evaluate portfolio performance." },
+  { keys:["what is roa","return on assets","what is roe","return on equity","explain roa roe"],
+    answer:"<b>ROA (Return on Assets)</b> = net income ÷ total assets — measures how efficiently a company uses its assets to generate profit. <b>ROE (Return on Equity)</b> = net income ÷ shareholders' equity — measures profitability relative to shareholder investment. <b>Why they matter:</b> high and improving ROA/ROE signal strong management and a competitive business. Buffett famously seeks companies with consistently high ROE (15%+)." },
 ];
 
 function checkQA(input) {
   const lower = input.toLowerCase().trim();
   for (const item of QA) {
-    if (item.keys.some(k => lower.includes(k))) {
-      return item.answer;
-    }
+    if (item.keys.some(k => lower.includes(k))) return item.answer;
   }
   return null;
 }
 
-// ── CHAT HISTORY (localStorage) ───────────────────────────────────────────────
+// ── CHAT HISTORY ──────────────────────────────────────────────────────────────
 const MAX_CHATS = 3;
-
-function loadChats() {
-  try { return JSON.parse(localStorage.getItem("finofin_chats") || "[]"); }
-  catch { return []; }
-}
-function saveChats(chats) {
-  try { localStorage.setItem("finofin_chats", JSON.stringify(chats)); } catch {}
-}
-function loadActiveId() {
-  try { return localStorage.getItem("finofin_active") || null; } catch { return null; }
-}
-function saveActiveId(id) {
-  try { localStorage.setItem("finofin_active", id); } catch {}
-}
+function loadChats() { try { return JSON.parse(localStorage.getItem("ff_chats") || "[]"); } catch { return []; } }
+function saveChats(c) { try { localStorage.setItem("ff_chats", JSON.stringify(c)); } catch {} }
+function loadActiveId() { try { return localStorage.getItem("ff_active") || null; } catch { return null; } }
+function saveActiveId(id) { try { localStorage.setItem("ff_active", id); } catch {} }
 
 let chats = loadChats();
 let activeId = loadActiveId();
-
-// Ensure active chat exists
 if (!chats.find(c => c.id === activeId)) {
   activeId = chats.length > 0 ? chats[0].id : null;
   saveActiveId(activeId);
 }
-
 function getActiveChat() { return chats.find(c => c.id === activeId) || null; }
-
 function createChat(name) {
-  const id = "chat_" + Date.now();
+  const id = "c" + Date.now();
   const chat = { id, name: name || `Chat ${chats.length + 1}`, messages: [], created: Date.now() };
   chats.push(chat);
   if (chats.length > MAX_CHATS) chats = chats.slice(-MAX_CHATS);
   saveChats(chats);
   return chat;
 }
-
 function deleteChat(id) {
   chats = chats.filter(c => c.id !== id);
   saveChats(chats);
@@ -469,29 +466,25 @@ function deleteChat(id) {
     saveActiveId(activeId);
   }
 }
-
-function saveMsgToChat(role, text, html) {
+function saveMsg(role, html) {
   if (!activeId) return;
   const chat = getActiveChat();
   if (!chat) return;
-  chat.messages.push({ role, text: text || "", html: html || "", ts: Date.now() });
-  // Keep last 20 messages per chat
+  chat.messages.push({ role, html, ts: Date.now() });
   if (chat.messages.length > 20) chat.messages = chat.messages.slice(-20);
   saveChats(chats);
 }
 
-// ── RESOLVE TICKER ────────────────────────────────────────────────────────────
+// ── TICKER RESOLUTION ─────────────────────────────────────────────────────────
 async function resolveTicker(raw) {
   const input = raw.trim();
   const upper = input.toUpperCase();
-
-  // Direct ticker probe (handles large, mid AND small caps)
+  // Direct probe for any ticker (1-6 chars)
   if (/^[A-Za-z]{1,6}$/.test(input)) {
     const probe = await get(`${API}/profile/${upper}`);
     if (probe && Array.isArray(probe) && probe[0]?.symbol) return probe[0].symbol;
   }
-
-  // Search by name
+  // Name search
   const results = await get(`${API}/search?q=${encodeURIComponent(input)}`);
   if (results && Array.isArray(results) && results.length > 0) {
     const lower = input.toLowerCase();
@@ -500,59 +493,72 @@ async function resolveTicker(raw) {
                || results[0];
     return match.symbol;
   }
-
-  // Last resort — try the input as-is as a ticker
+  // Last resort direct
   if (upper.length <= 6) {
     const probe2 = await get(`${API}/profile/${upper}`);
     if (probe2 && Array.isArray(probe2) && probe2[0]?.symbol) return probe2[0].symbol;
   }
-
   return null;
 }
 
 // ── FETCH STOCK DATA ──────────────────────────────────────────────────────────
 async function fetchStockData(ticker) {
   const t = encodeURIComponent(ticker);
-  const [profile, quote, income, ratios, news, target, analyst] = await Promise.all([
+  const [profile, quote, income, ratios, keymetrics, news, target, analyst, analystdetail] = await Promise.all([
     get(`${API}/profile/${t}`),
     get(`${API}/quote/${t}`),
     get(`${API}/income/${t}`),
     get(`${API}/ratios/${t}`),
+    get(`${API}/keymetrics/${t}`),
     get(`${API}/news/${t}`),
     get(`${API}/target/${t}`),
-    get(`${API}/analyst/${t}`)
+    get(`${API}/analyst/${t}`),
+    get(`${API}/analystdetail/${t}`)
   ]);
 
-  const p  = (Array.isArray(profile)  && profile[0])  || {};
-  const q  = (Array.isArray(quote)    && quote[0])    || {};
-  const i  = (Array.isArray(income)   && income[0])   || {};
-  const r  = (Array.isArray(ratios)   && ratios[0])   || {};
-  const pt = (Array.isArray(target)   && target[0])   || {};
-  const an = (Array.isArray(analyst)  && analyst[0])  || {};
+  const p  = (Array.isArray(profile)     && profile[0])     || {};
+  const q  = (Array.isArray(quote)       && quote[0])       || {};
+  const i  = (Array.isArray(income)      && income[0])      || {};
+  const r  = (Array.isArray(ratios)      && ratios[0])      || {};
+  const km = (Array.isArray(keymetrics)  && keymetrics[0])  || {};
+  const pt = (Array.isArray(target)      && target[0])      || {};
+  const an = (Array.isArray(analyst)     && analyst[0])      || {};
 
   if (!p.companyName && !q.name) throw new Error(`No data found for "${ticker}".`);
 
-  const price     = p.price ?? q.price ?? null;
-  const change    = p.change ?? q.change ?? null;
-  const changePct = p.changePercentage ?? q.changePercentage ?? null;
+  const price     = FIRST(p.price, q.price);
+  const change    = FIRST(p.change, q.change);
+  const changePct = FIRST(p.changePercentage, q.changePercentage);
   const isUp      = change == null ? true : +change >= 0;
   const sign      = isUp ? "+" : "";
   const changeStr = price != null
-    ? `<span class="${isUp?'up':'dn'}">${sign}$${N(change)} (${sign}${N(changePct)}%)</span>`
+    ? `<span class="${isUp?'up':'dn'}">${sign}$${(+change).toFixed(2)} (${sign}${(+changePct).toFixed(2)}%)</span>`
     : "N/A";
 
   let range52w = "N/A";
   if (p.range) {
     const pts = p.range.split("-");
     if (pts.length >= 2) range52w = `$${(+pts[0]).toFixed(2)} – $${(+pts[pts.length-1]).toFixed(2)}`;
+  } else if (q.yearLow && q.yearHigh) {
+    range52w = `$${(+q.yearLow).toFixed(2)} – $${(+q.yearHigh).toFixed(2)}`;
   }
 
-  const eps    = q.eps ?? i.eps ?? null;
-  const pe     = r.peRatioTTM ?? r.priceEarningsRatioTTM ?? null;
-  const ps     = r.priceToSalesRatioTTM ?? null;
-  const pb     = r.pbRatioTTM ?? r.priceToBookRatioTTM ?? null;
-  const evEbit = r.evToEbitdaTTM ?? r.enterpriseValueOverEBITDATTM ?? r.evEbitdaTTM ?? null;
-  const margin = (i.revenue && i.netIncome) ? PCT(i.netIncome / i.revenue) : "N/A";
+  const eps = FIRST(q.eps, i.eps, p.eps);
+
+  // Valuation — combine ratios + keymetrics to maximize coverage
+  const pe     = FIRST(r.peRatioTTM, r.priceEarningsRatioTTM, km.peRatioTTM, q.pe);
+  const ps     = FIRST(r.priceToSalesRatioTTM, r.psTTM, km.priceToSalesRatioTTM);
+  const pb     = FIRST(r.pbRatioTTM, r.priceToBookRatioTTM, km.pbRatioTTM, km.priceToBookRatioTTM);
+  const evEbit = FIRST(r.evToEbitdaTTM, r.enterpriseValueOverEBITDATTM, r.evEbitdaTTM, km.evToEbitdaTTM, km.enterpriseValueOverEBITDATTM);
+  const debtEq = FIRST(r.debtEquityRatioTTM, km.debtToEquityTTM);
+  const roa    = FIRST(r.returnOnAssetsTTM, km.roaTTM);
+  const roe    = FIRST(r.returnOnEquityTTM, km.roeTTM);
+
+  const revenue   = FIRST(i.revenue, p.revenue);
+  const netIncome = FIRST(i.netIncome, p.netIncome);
+  const margin    = (revenue && netIncome) ? `${((+netIncome / +revenue) * 100).toFixed(1)}%` : "N/A";
+  const grossMargin = FIRST(r.grossProfitMarginTTM, km.grossProfitMarginTTM);
+
   const betaNote = p.beta ? (+p.beta > 1.5 ? "High volatility vs. market" : +p.beta < 0.8 ? "Lower volatility than market" : "Moderate market sensitivity") : "N/A";
 
   const strongBuy  = an.analystRatingsStrongBuy  || 0;
@@ -569,6 +575,16 @@ async function fetchStockData(ticker) {
     else if (ratio < 0.3) consensus = "Sell";
   }
 
+  // Individual analyst details
+  const analystDetails = Array.isArray(analystdetail) ? analystdetail.slice(0,3).map(a => ({
+    name: a.analystName || a.analyst || "Analyst",
+    company: a.analystCompany || a.firm || "",
+    target: a.priceTarget ? `$${(+a.priceTarget).toFixed(2)}` : "N/A",
+    date: (a.publishedDate || a.date || "").split(" ")[0] || "N/A",
+    url: a.newsURL || a.url || null,
+    title: a.newsTitle || null
+  })) : [];
+
   return {
     snapshot: {
       ticker: p.symbol || ticker, company: p.companyName || q.name || ticker,
@@ -580,17 +596,20 @@ async function fetchStockData(ticker) {
       website: p.website || null, image: p.image || null
     },
     market: {
-      price: price != null ? `$${N(price)}` : "N/A",
+      price: price != null ? `$${(+price).toFixed(2)}` : "N/A",
       changeStr, isUp,
-      marketCap: BIG(p.marketCap ?? q.marketCap),
-      volume: BIG(p.volume ?? q.volume),
-      avgVolume: BIG(p.averageVolume ?? q.averageVolume),
+      marketCap: BIG(p.marketCap || q.marketCap),
+      volume: BIG(p.volume || q.volume),
+      avgVolume: BIG(p.averageVolume || q.averageVolume),
       range52w
     },
-    risk: { beta: N(p.beta), note: betaNote },
+    risk: { beta: N(p.beta), note: betaNote, debtEq: N(debtEq) },
     financials: {
-      revenueTTM: BIG(i.revenue), netIncomeTTM: BIG(i.netIncome),
-      epsTTM: eps != null ? `$${N(eps)}` : "N/A", margin
+      revenueTTM: BIG(revenue), netIncomeTTM: BIG(netIncome),
+      epsTTM: eps != null ? `$${(+eps).toFixed(2)}` : "N/A",
+      margin, grossMargin: grossMargin ? `${(+grossMargin*100).toFixed(1)}%` : "N/A",
+      roa: roa ? `${(+roa*100).toFixed(1)}%` : "N/A",
+      roe: roe ? `${(+roe*100).toFixed(1)}%` : "N/A"
     },
     valuation: { pe: N(pe), ps: N(ps), pb: N(pb), evEbitda: N(evEbit) },
     summary: p.description || "No description available.",
@@ -602,30 +621,32 @@ async function fetchStockData(ticker) {
       summary: (n.text || n.summary || "").slice(0,180) + "…"
     })) : [],
     analyst: { consensus, total, strongBuy, buy, hold, sell, strongSell,
-      targetAvg: pt.targetConsensus ? `$${N(pt.targetConsensus)}` : "N/A",
-      targetHigh: pt.targetHigh ? `$${N(pt.targetHigh)}` : "N/A",
-      targetLow: pt.targetLow ? `$${N(pt.targetLow)}` : "N/A"
+      targetAvg: pt.targetConsensus ? `$${(+pt.targetConsensus).toFixed(2)}` : "N/A",
+      targetHigh: pt.targetHigh ? `$${(+pt.targetHigh).toFixed(2)}` : "N/A",
+      targetLow: pt.targetLow ? `$${(+pt.targetLow).toFixed(2)}` : "N/A",
+      targetMedian: pt.targetMedian ? `$${(+pt.targetMedian).toFixed(2)}` : "N/A",
+      details: analystDetails
     },
     insight: {
       drivers: [
-        `Revenue (TTM): ${BIG(i.revenue)} · Net Income: ${BIG(i.netIncome)}`,
-        `Market Cap: ${BIG(p.marketCap??q.marketCap)} · Sector: ${p.sector||"N/A"}`,
+        `Revenue (TTM): ${BIG(revenue)} · Net Income: ${BIG(netIncome)}`,
+        `Market Cap: ${BIG(p.marketCap||q.marketCap)} · Sector: ${p.sector||"N/A"}`,
         `52-Week Range: ${range52w}`
       ],
       bull: [
-        pe ? `P/E of ${N(pe)} relative to sector peers` : "Revenue and margin fundamentals",
-        `Net income ${BIG(i.netIncome)} · margin ${margin}`
+        pe ? `P/E of ${N(pe)} — earnings valuation relative to sector peers` : "Revenue fundamentals indicate operating strength",
+        `Net income ${BIG(netIncome)} · profit margin ${margin}`
       ],
       bear: [
         `Beta ${N(p.beta)} — ${betaNote.toLowerCase()}`,
-        `Margin at ${margin} — watch for compression`
+        `Monitor gross margin (${grossMargin ? `${(+grossMargin*100).toFixed(1)}%` : "N/A"}) for compression trends`
       ],
-      watch: ["Next earnings & forward guidance", "Macro rates & sector rotation", "Analyst revisions & institutional flows"]
+      watch: ["Next earnings release and forward guidance", "Macro rates and sector rotation signals", "Analyst rating revisions and institutional positioning"]
     }
   };
 }
 
-// ── BUILD REPORT ──────────────────────────────────────────────────────────────
+// ── BUILD REPORT HTML ─────────────────────────────────────────────────────────
 function buildReport(data) {
   const {snapshot:s, market:m, risk:r, financials:f, valuation:v, analyst:an} = data;
   const li = arr => arr.map(x=>`<li>${x}</li>`).join("");
@@ -633,30 +654,40 @@ function buildReport(data) {
 
   const newsHTML = data.news.length
     ? data.news.map(n => `
-      <div class="news-item">
-        ${n.url ? `<a href="${n.url}" target="_blank" rel="noopener" class="news-link">${n.headline}</a>` : `<div style="font-weight:600;font-size:13px;margin-bottom:3px;color:var(--text)">${n.headline}</div>`}
-        <div class="news-meta">${n.source} · ${n.date}</div>
-        <div class="news-summary">${n.summary}</div>
+      <div class="ni">
+        ${n.url ? `<a href="${n.url}" target="_blank" rel="noopener" class="nl">${n.headline}</a>` : `<div style="font-weight:600;font-size:13px;margin-bottom:3px;color:var(--text)">${n.headline}</div>`}
+        <div class="nm">${n.source} · ${n.date}</div>
+        <div class="ns">${n.summary}</div>
       </div>`).join("")
-    : `<div class="news-item"><div class="news-summary">No recent news found.</div></div>`;
+    : `<div class="ni"><div class="ns">No recent news found.</div></div>`;
 
   const tot = an.total || 0;
   const abar = (val, color, label) => `
-    <div class="analyst-row">
-      <span class="analyst-label" style="color:${color}">${label}</span>
-      <div class="analyst-track"><div class="analyst-fill" style="width:${tot>0?((val/tot)*100).toFixed(0):0}%;background:${color}"></div></div>
-      <span class="analyst-count">${val}</span>
+    <div class="ar">
+      <span class="al" style="color:${color}">${label}</span>
+      <div class="at"><div class="af" style="width:${tot>0?((val/tot)*100).toFixed(0):0}%;background:${color}"></div></div>
+      <span class="ac">${val}</span>
     </div>`;
   const cColor = an.consensus==="Strong Buy"||an.consensus==="Buy" ? "#4ade80" : an.consensus==="Sell" ? "#f87171" : "#fbbf24";
 
+  // Analyst detail links
+  const analystLinksHTML = an.details && an.details.length > 0
+    ? an.details.map(a => `
+      <div class="analyst-link-item">
+        <div class="an">${a.name}${a.company ? ` <span style="font-weight:400;color:var(--muted)">· ${a.company}</span>` : ""}</div>
+        <div class="af2">Price Target: <b style="color:var(--text)">${a.target}</b> · ${a.date}</div>
+        ${a.url ? `<a href="${a.url}" target="_blank" rel="noopener" class="at2">↗ Read Research Note</a>` : `<span style="font-size:11px;color:var(--muted)">No direct link available</span>`}
+      </div>`).join("")
+    : `<div style="font-size:12px;color:var(--muted);padding:4px 0">Individual analyst data not available for this ticker.</div>`;
+
   return `
   <div class="report" data-ticker="${s.ticker}" data-tvid="${tvId}">
-    <div class="report-head">
+    <div class="rhead">
       <div style="display:flex;align-items:center;gap:9px">
         ${s.image?`<img src="${s.image}" style="width:32px;height:32px;border-radius:7px;object-fit:contain;background:rgba(255,255,255,.05);padding:2px" onerror="this.style.display='none'"/>`:""}
         <div>
           <h4>${s.company} <span style="color:var(--muted);font-weight:400">(${s.ticker})</span></h4>
-          <div class="sub">${s.exchange} · ${s.sector} · FMP Live</div>
+          <div class="sub">${s.exchange} · ${s.sector} · FMP Live Data</div>
         </div>
       </div>
       <div class="stamp">${new Date().toLocaleString()}</div>
@@ -669,14 +700,14 @@ function buildReport(data) {
       <div><b>Industry</b><span class="val">${s.industry}</span></div>
       <div><b>HQ</b><span class="val">${s.hq}</span></div>
       <div><b>CEO</b><span class="val">${s.ceo}</span></div>
-      <div><b>IPO</b><span class="val">${s.ipo}</span></div>
+      <div><b>IPO Date</b><span class="val">${s.ipo}</span></div>
       <div><b>Employees</b><span class="val">${s.employees}</span></div>
       <div><b>Website</b><span class="val">${s.website?`<a href="${s.website}" target="_blank" style="color:var(--accent)">${s.website}</a>`:"N/A"}</span></div>
     </div>
 
     <div class="sec">Market Performance</div>
     <div class="kv">
-      <div><b>Price</b><span class="val" style="font-size:15px;font-weight:700">${m.price}</span></div>
+      <div><b>Price</b><span class="val" style="font-size:16px;font-weight:700">${m.price}</span></div>
       <div><b>Daily Change</b><span class="val">${m.changeStr}</span></div>
       <div><b>Market Cap</b><span class="val">${m.marketCap}</span></div>
       <div><b>Volume</b><span class="val">${m.volume}</span></div>
@@ -687,7 +718,8 @@ function buildReport(data) {
     <div class="sec">Risk & Volatility</div>
     <div class="kv">
       <div><b>Beta</b><span class="val">${r.beta}</span></div>
-      <div><b>Profile</b><span class="val">${r.note}</span></div>
+      <div><b>Risk Profile</b><span class="val">${r.note}</span></div>
+      <div><b>Debt/Equity</b><span class="val">${r.debtEq}</span></div>
     </div>
 
     <div class="sec">Financials (TTM)</div>
@@ -695,7 +727,9 @@ function buildReport(data) {
       <div><b>Revenue</b><span class="val">${f.revenueTTM}</span></div>
       <div><b>Net Income</b><span class="val">${f.netIncomeTTM}</span></div>
       <div><b>EPS</b><span class="val">${f.epsTTM}</span></div>
-      <div><b>Profit Margin</b><span class="val">${f.margin}</span></div>
+      <div><b>Net Margin</b><span class="val">${f.margin}</span></div>
+      <div><b>Gross Margin</b><span class="val">${f.grossMargin}</span></div>
+      <div><b>ROA / ROE</b><span class="val">${f.roa} / ${f.roe}</span></div>
     </div>
 
     <div class="sec">Valuation</div>
@@ -707,7 +741,7 @@ function buildReport(data) {
     </div>
 
     <div class="sec">Business Summary</div>
-    <div class="summary-text">${data.summary}</div>
+    <div class="stext">${data.summary}</div>
 
     <div class="sec">Recent News</div>
     ${newsHTML}
@@ -715,11 +749,16 @@ function buildReport(data) {
     <div class="sec">Analyst Sentiment</div>
     <div class="kv" style="margin-bottom:8px">
       <div><b>Consensus</b><span class="val" style="color:${cColor};font-weight:700;font-size:14px">${an.consensus}</span></div>
-      <div><b>Analysts</b><span class="val">${an.total||"N/A"}</span></div>
-      <div><b>Avg Target</b><span class="val">${an.targetAvg}</span></div>
-      <div><b>High / Low</b><span class="val">${an.targetHigh} / ${an.targetLow}</span></div>
+      <div><b>Analysts Tracked</b><span class="val">${an.total||"N/A"}</span></div>
+      <div><b>Avg Price Target</b><span class="val">${an.targetAvg}</span></div>
+      <div><b>Median Target</b><span class="val">${an.targetMedian}</span></div>
+      <div><b>High Target</b><span class="val">${an.targetHigh}</span></div>
+      <div><b>Low Target</b><span class="val">${an.targetLow}</span></div>
     </div>
-    ${tot>0?`<div style="padding:6px 0">${abar(an.strongBuy,"#4ade80","Strong Buy")}${abar(an.buy,"#86efac","Buy")}${abar(an.hold,"#fbbf24","Hold")}${abar(an.sell+an.strongSell,"#f87171","Sell")}</div>`:""}
+    ${tot>0?`<div style="padding:6px 0 8px">${abar(an.strongBuy,"#4ade80","Strong Buy")}${abar(an.buy,"#86efac","Buy")}${abar(an.hold,"#fbbf24","Hold")}${abar(an.sell+an.strongSell,"#f87171","Sell")}</div>`:""}
+
+    <div style="margin-bottom:4px;font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(100,180,255,.65)">Recent Analyst Notes</div>
+    ${analystLinksHTML}
 
     <div class="sec">Price Chart · Live (TradingView)</div>
     <div class="tv-wrap" id="${tvId}">
@@ -728,113 +767,104 @@ function buildReport(data) {
 
     <div class="sec">AI Insight</div>
     <div style="margin-bottom:7px">
-      <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:rgba(100,180,255,.65);margin-bottom:5px">Key Drivers</div>
-      <ul class="bullets">${li(data.insight.drivers)}</ul>
+      <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:rgba(100,180,255,.6);margin-bottom:5px">Key Drivers</div>
+      <ul class="blist">${li(data.insight.drivers)}</ul>
     </div>
-    <div class="insight-grid">
-      <div class="insight-box"><h5>Bull Case</h5><ul class="bullets" style="padding-left:13px">${li(data.insight.bull)}</ul></div>
-      <div class="insight-box"><h5>Bear Case</h5><ul class="bullets" style="padding-left:13px">${li(data.insight.bear)}</ul></div>
+    <div class="ig">
+      <div class="ib"><h5>Bull Case</h5><ul class="blist" style="padding-left:13px">${li(data.insight.bull)}</ul></div>
+      <div class="ib"><h5>Bear Case</h5><ul class="blist" style="padding-left:13px">${li(data.insight.bear)}</ul></div>
     </div>
     <div style="margin-top:9px">
-      <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:rgba(100,180,255,.65);margin-bottom:5px">What to Watch</div>
-      <ul class="bullets">${li(data.insight.watch)}</ul>
+      <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:rgba(100,180,255,.6);margin-bottom:5px">What to Watch</div>
+      <ul class="blist">${li(data.insight.watch)}</ul>
     </div>
 
     <div style="margin-top:12px;padding-top:9px;border-top:1px solid rgba(58,167,255,.07);font-family:var(--mono);font-size:9px;color:rgba(138,172,204,.4)">
-      Data: FMP API · Chart: TradingView · ${new Date().toLocaleString()}
+      Data: Financial Modeling Prep API · Chart: TradingView · ${new Date().toLocaleString()}
     </div>
   </div>`;
 }
 
-// ── TRADINGVIEW CHART ─────────────────────────────────────────────────────────
-let tvScriptLoaded = false;
+// ── TRADINGVIEW ───────────────────────────────────────────────────────────────
+let tvLoaded = false;
 function renderTVChart(tvId, ticker) {
-  const container = document.getElementById(tvId);
-  if (!container) return;
-
+  const el = document.getElementById(tvId);
+  if (!el) return;
   const doRender = () => {
     try {
-      container.innerHTML = "";
+      el.innerHTML = "";
       new TradingView.widget({
-        container_id: tvId,
-        symbol: ticker,
-        interval: "D",
-        timezone: "America/New_York",
-        theme: "dark",
-        style: "2",
-        locale: "en",
-        toolbar_bg: "#0a1628",
-        enable_publishing: false,
-        hide_top_toolbar: false,
-        hide_side_toolbar: true,
-        hide_legend: false,
-        save_image: false,
-        height: 300,
-        width: "100%",
+        container_id: tvId, symbol: ticker,
+        interval: "D", timezone: "America/New_York",
+        theme: "dark", style: "2", locale: "en",
+        toolbar_bg: "#0a1628", enable_publishing: false,
+        hide_top_toolbar: false, hide_side_toolbar: true,
+        save_image: false, height: 300, width: "100%",
         backgroundColor: "#0a1628",
-        gridColor: "rgba(58,167,255,0.05)",
+        gridColor: "rgba(58,167,255,0.04)",
       });
     } catch(e) {
-      if (container) container.innerHTML = `<div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">Chart unavailable — <a href="https://www.tradingview.com/chart/?symbol=${ticker}" target="_blank" style="color:var(--accent)">View on TradingView ↗</a></div>`;
+      if(el) el.innerHTML=`<div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">Chart unavailable — <a href="https://www.tradingview.com/chart/?symbol=${ticker}" target="_blank" style="color:var(--accent)">Open on TradingView ↗</a></div>`;
     }
   };
-
-  if (tvScriptLoaded) { doRender(); return; }
+  if (tvLoaded) { doRender(); return; }
   const s = document.createElement("script");
   s.src = "https://s3.tradingview.com/tv.js";
-  s.onload = () => { tvScriptLoaded = true; doRender(); };
-  s.onerror = () => {
-    if (container) container.innerHTML = `<div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">Chart unavailable — <a href="https://www.tradingview.com/chart/?symbol=${ticker}" target="_blank" style="color:var(--accent)">View on TradingView ↗</a></div>`;
-  };
+  s.onload = () => { tvLoaded = true; doRender(); };
+  s.onerror = () => { if(el) el.innerHTML=`<div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">Chart unavailable — <a href="https://www.tradingview.com/chart/?symbol=${ticker}" target="_blank" style="color:var(--accent)">Open on TradingView ↗</a></div>`; };
   document.head.appendChild(s);
 }
 
-// ── DOOR CREAK ────────────────────────────────────────────────────────────────
+// ── DOOR SOUND — light, cartoonish, friendly creak ────────────────────────────
 function playDoorCreak() {
   try {
     const AC = window.AudioContext || window.webkitAudioContext;
-    const ctx = new AC(), dur = 1.2, t0 = ctx.currentTime;
+    const ctx = new AC(), t0 = ctx.currentTime;
 
-    // Low rumble
-    const buf = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate);
-    const d = buf.getChannelData(0);
-    for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / d.length) * 0.4;
-    const noise = ctx.createBufferSource(); noise.buffer = buf;
+    // Squeaky hinge: rising then settling tone — light and cartoonish
+    const osc1 = ctx.createOscillator();
+    osc1.type = "sine";
+    // Start mid, rise quickly, then settle — classic cartoon door squeak
+    osc1.frequency.setValueAtTime(300, t0);
+    osc1.frequency.linearRampToValueAtTime(700, t0 + 0.08);
+    osc1.frequency.linearRampToValueAtTime(500, t0 + 0.18);
+    osc1.frequency.linearRampToValueAtTime(650, t0 + 0.28);
+    osc1.frequency.linearRampToValueAtTime(400, t0 + 0.45);
 
-    // Creak oscillator 1 - main creak
-    const osc1 = ctx.createOscillator(); osc1.type = "sawtooth";
-    osc1.frequency.setValueAtTime(200, t0);
-    osc1.frequency.linearRampToValueAtTime(80, t0 + 0.4);
-    osc1.frequency.linearRampToValueAtTime(140, t0 + 0.7);
-    osc1.frequency.linearRampToValueAtTime(60, t0 + dur);
-
-    // Creak oscillator 2 - harmonics
-    const osc2 = ctx.createOscillator(); osc2.type = "square";
-    osc2.frequency.setValueAtTime(320, t0);
-    osc2.frequency.linearRampToValueAtTime(120, t0 + 0.5);
-    osc2.frequency.linearRampToValueAtTime(200, t0 + 0.8);
-    osc2.frequency.linearRampToValueAtTime(90, t0 + dur);
-
-    const filt = ctx.createBiquadFilter(); filt.type = "bandpass"; filt.frequency.value = 400; filt.Q.value = 1.5;
+    // Second lighter harmonic for "squeaky wood" character
+    const osc2 = ctx.createOscillator();
+    osc2.type = "triangle";
+    osc2.frequency.setValueAtTime(450, t0);
+    osc2.frequency.linearRampToValueAtTime(900, t0 + 0.1);
+    osc2.frequency.linearRampToValueAtTime(600, t0 + 0.35);
+    osc2.frequency.linearRampToValueAtTime(750, t0 + 0.45);
 
     const g1 = ctx.createGain();
-    g1.gain.setValueAtTime(0.0001, t0);
-    g1.gain.linearRampToValueAtTime(0.22, t0 + 0.06);
-    g1.gain.linearRampToValueAtTime(0.18, t0 + 0.4);
-    g1.gain.linearRampToValueAtTime(0.25, t0 + 0.6);
-    g1.gain.linearRampToValueAtTime(0.0001, t0 + dur);
+    g1.gain.setValueAtTime(0, t0);
+    g1.gain.linearRampToValueAtTime(0.18, t0 + 0.03);
+    g1.gain.setValueAtTime(0.18, t0 + 0.35);
+    g1.gain.linearRampToValueAtTime(0, t0 + 0.55);
 
-    const g2 = ctx.createGain(); g2.gain.value = 0.08;
-    const g3 = ctx.createGain(); g3.gain.value = 0.05;
+    const g2 = ctx.createGain();
+    g2.gain.setValueAtTime(0, t0);
+    g2.gain.linearRampToValueAtTime(0.07, t0 + 0.05);
+    g2.gain.linearRampToValueAtTime(0, t0 + 0.5);
 
-    noise.connect(filt); filt.connect(g1);
-    osc1.connect(g2); g2.connect(g1);
-    osc2.connect(g3); g3.connect(g1);
-    g1.connect(ctx.destination);
+    // Light wooden knock at the start
+    const buf = ctx.createBuffer(1, ctx.sampleRate * 0.08, ctx.sampleRate);
+    const bd  = buf.getChannelData(0);
+    for (let k = 0; k < bd.length; k++) bd[k] = (Math.random() * 2 - 1) * (1 - k / bd.length) * 0.15;
+    const knock = ctx.createBufferSource(); knock.buffer = buf;
+    const gk = ctx.createGain(); gk.gain.value = 0.5;
+    const fk = ctx.createBiquadFilter(); fk.type = "highpass"; fk.frequency.value = 800;
 
-    noise.start(t0); osc1.start(t0); osc2.start(t0);
-    noise.stop(t0 + dur); osc1.stop(t0 + dur); osc2.stop(t0 + dur);
-    setTimeout(() => ctx.close(), 1500);
+    osc1.connect(g1); g1.connect(ctx.destination);
+    osc2.connect(g2); g2.connect(ctx.destination);
+    knock.connect(fk); fk.connect(gk); gk.connect(ctx.destination);
+
+    osc1.start(t0); osc2.start(t0); knock.start(t0);
+    osc1.stop(t0 + 0.6); osc2.stop(t0 + 0.6); knock.stop(t0 + 0.1);
+    setTimeout(() => ctx.close(), 800);
   } catch(e) {}
 }
 
@@ -858,32 +888,32 @@ const $newChatBtn   = document.getElementById("newChatBtn");
 const $brandLink    = document.getElementById("brandLink");
 
 function showOverlay(title, msg) {
-  $overlayTitle.textContent = title; $overlayMsg.textContent = msg;
-  $overlayBar.style.animation = "none"; $overlayBar.offsetHeight; $overlayBar.style.animation = "";
+  $overlayTitle.textContent=title; $overlayMsg.textContent=msg;
+  $overlayBar.style.animation="none"; $overlayBar.offsetHeight; $overlayBar.style.animation="";
   $overlay.classList.add("active");
 }
 function hideOverlay() { $overlay.classList.remove("active"); }
 
-function addHTML(html, who, meta, persist = true) {
-  const d = document.createElement("div"); d.className = "msg " + who; d.innerHTML = html;
-  const s = document.createElement("small"); s.textContent = meta || (who === "ai" ? "Finofin · live" : "You");
+function addHTML(html, who, meta, persist=true) {
+  const d=document.createElement("div"); d.className="msg "+who; d.innerHTML=html;
+  const s=document.createElement("small"); s.textContent=meta||(who==="ai"?"Finofin · live":"You");
   d.appendChild(s); $chatEl.appendChild(d);
-  d.scrollIntoView({ behavior: "smooth", block: "end" });
-  if (persist) saveMsgToChat(who, d.innerText, html);
+  d.scrollIntoView({behavior:"smooth",block:"end"});
+  if(persist) saveMsg(who, html);
   return d;
 }
-function addText(text, who, persist = true) {
-  const s = document.createElement("div"); s.textContent = text;
+function addText(text, who, persist=true) {
+  const s=document.createElement("div"); s.textContent=text;
   return addHTML(s.innerHTML, who, null, persist);
 }
-function lock()   { $input.disabled = true;  $send.disabled = true; }
-function unlock() { $input.disabled = false; $send.disabled = false; $input.focus(); }
+function lock()   { $input.disabled=true;  $send.disabled=true; }
+function unlock() { $input.disabled=false; $send.disabled=false; $input.focus(); }
 
 function showMain() {
   $landingView.classList.remove("active");
   $mainView.classList.add("active");
   $backDoor.classList.add("visible");
-  setTimeout(() => $input.focus(), 100);
+  setTimeout(()=>$input.focus(), 100);
 }
 function showLanding() {
   $mainView.classList.remove("active");
@@ -893,218 +923,137 @@ function showLanding() {
   $enterDoor.classList.remove("opening");
 }
 
-// ── CHAT HISTORY UI ───────────────────────────────────────────────────────────
+// ── HISTORY UI ────────────────────────────────────────────────────────────────
 function renderHistoryPanel() {
   $chatList.innerHTML = "";
   if (chats.length === 0) {
-    $chatList.innerHTML = `<div style="font-size:12px;color:var(--muted);padding:8px 0">No saved chats yet.</div>`;
+    $chatList.innerHTML = `<div style="font-size:12px;color:var(--muted);padding:6px 0">No saved chats yet.</div>`;
     return;
   }
   chats.forEach(chat => {
     const div = document.createElement("div");
-    div.className = "chat-card" + (chat.id === activeId ? " active-card" : "");
+    div.className = "chat-card" + (chat.id===activeId?" active-card":"");
     div.innerHTML = `
-      <div class="chat-card-name">
-        <span class="chat-name-text">${chat.name}</span>
-        <span class="chat-card-del" data-id="${chat.id}">✕</span>
+      <div class="cc-name">
+        <span class="cc-name-text">${chat.name}</span>
+        <span class="cc-del" data-id="${chat.id}">✕</span>
       </div>
-      <div class="chat-card-meta">${chat.messages.length} messages · ${new Date(chat.created).toLocaleDateString()}</div>`;
-
-    // Click to load
-    div.addEventListener("click", (e) => {
-      if (e.target.classList.contains("chat-card-del")) return;
-      if (e.target.classList.contains("rename-input")) return;
+      <div class="cc-meta">${chat.messages.length} messages · ${new Date(chat.created).toLocaleDateString()}</div>`;
+    div.addEventListener("click", (e)=>{
+      if(e.target.classList.contains("cc-del")) return;
+      if(e.target.classList.contains("rename-input")) return;
       loadChatSession(chat.id);
     });
-
-    // Double-click name to rename
-    div.querySelector(".chat-name-text").addEventListener("dblclick", () => {
-      const inp = document.createElement("input");
-      inp.className = "rename-input";
-      inp.value = chat.name;
-      div.querySelector(".chat-name-text").replaceWith(inp);
-      inp.focus();
-      inp.addEventListener("blur", () => {
-        chat.name = inp.value.trim() || chat.name;
-        saveChats(chats);
-        renderHistoryPanel();
-      });
-      inp.addEventListener("keydown", e => { if (e.key === "Enter") inp.blur(); });
+    div.querySelector(".cc-name-text").addEventListener("dblclick", ()=>{
+      const inp=document.createElement("input"); inp.className="rename-input"; inp.value=chat.name;
+      div.querySelector(".cc-name-text").replaceWith(inp); inp.focus();
+      inp.addEventListener("blur",()=>{ chat.name=inp.value.trim()||chat.name; saveChats(chats); renderHistoryPanel(); });
+      inp.addEventListener("keydown",e=>{if(e.key==="Enter")inp.blur();});
     });
-
-    // Delete
-    div.querySelector(".chat-card-del").addEventListener("click", () => {
-      deleteChat(chat.id);
-      renderHistoryPanel();
-      if (activeId === null) initNewConversation();
-    });
-
+    div.querySelector(".cc-del").addEventListener("click",()=>{ deleteChat(chat.id); renderHistoryPanel(); });
     $chatList.appendChild(div);
   });
 }
 
 function loadChatSession(id) {
-  activeId = id;
-  saveActiveId(id);
-  const chat = getActiveChat();
-  if (!chat) return;
-
-  $chatEl.innerHTML = "";
-  chat.messages.forEach(m => {
-    const d = document.createElement("div");
-    d.className = "msg " + m.role;
-    d.innerHTML = m.html || m.text;
-    const s = document.createElement("small");
-    s.textContent = m.role === "ai" ? "Finofin · saved" : "You";
-    d.appendChild(s);
-    $chatEl.appendChild(d);
+  activeId=id; saveActiveId(id);
+  const chat=getActiveChat(); if(!chat)return;
+  $chatEl.innerHTML="";
+  chat.messages.forEach(m=>{
+    const d=document.createElement("div"); d.className="msg "+m.role; d.innerHTML=m.html;
+    const s=document.createElement("small"); s.textContent=m.role==="ai"?"Finofin · saved":"You";
+    d.appendChild(s); $chatEl.appendChild(d);
   });
-
-  phase = "ready";
-  $status.textContent = `Loaded: ${chat.name}`;
-  $historyPanel.classList.remove("open");
-  renderHistoryPanel();
+  phase="ready"; $status.textContent=`Loaded: ${chat.name}`;
+  $historyPanel.classList.remove("open"); renderHistoryPanel();
 }
 
-function initNewConversation(skipGreeting = false) {
-  // Create new chat or reuse if no chats
+function initNewConversation() {
   if (chats.length >= MAX_CHATS) {
-    // Can't add more, prompt user in history panel
-    $historyPanel.classList.add("open");
-    renderHistoryPanel();
+    $historyPanel.classList.add("open"); renderHistoryPanel();
     return;
   }
-
-  const newChat = createChat();
-  activeId = newChat.id;
-  saveActiveId(activeId);
-
-  $chatEl.innerHTML = "";
-  phase = "name";
-  userName = "";
-  $input.placeholder = "Type your name…";
-  $status.textContent = "Waiting for your name";
-
-  if (!skipGreeting) {
-    setTimeout(() => {
-      addText("Hello, I am Finofin. What is your name?", "ai");
-    }, 200);
-  }
-
+  const nc=createChat(); activeId=nc.id; saveActiveId(activeId);
+  $chatEl.innerHTML=""; phase="name"; userName="";
+  $input.placeholder="Type your name…"; $status.textContent="Waiting for your name";
+  setTimeout(()=>addText("Hello, I am Finofin. What is your name?","ai"),150);
   renderHistoryPanel();
 }
 
 // ── CONVERSATION ──────────────────────────────────────────────────────────────
-let phase = "name", userName = "";
+let phase="name", userName="";
 
 async function handleReport(raw) {
-  lock(); addText(raw, "user"); $input.value = "";
-
-  showOverlay("Resolving company…", `Looking up "${raw}"…`);
-  $status.textContent = `Resolving "${raw}"…`;
-
+  lock(); addText(raw,"user"); $input.value="";
+  showOverlay("Resolving company…",`Looking up "${raw}"…`);
+  $status.textContent=`Resolving "${raw}"…`;
   let ticker;
-  try { ticker = await resolveTicker(raw); } catch(e) { ticker = null; }
-
+  try { ticker=await resolveTicker(raw); } catch(e) { ticker=null; }
   if (!ticker) {
     hideOverlay();
-    addHTML(`<div class="err"><b>Could not find "${raw}"</b><br/>Try a ticker like <b>AAPL</b>, <b>WMT</b>, <b>TSLA</b>, or a company name like <b>Apple</b>, <b>Walmart</b>, <b>Tesla</b>. You can also ask me a financial question like "what is beta?"</div>`, "ai", "Finofin · error");
-    $status.textContent = "Could not resolve — try again";
-    unlock(); return;
+    addHTML(`<div class="err"><b>Could not find "${raw}"</b><br/>Try a ticker like <b>AAPL</b>, <b>WMT</b>, <b>TSLA</b>, or a company name. You can also ask me a financial question like "what is beta?" or "what is alpha?"</div>`,"ai","Finofin · error");
+    $status.textContent="Could not resolve — try again"; unlock(); return;
   }
-
-  showOverlay(`Fetching live data for ${ticker}…`, "Pulling quote, financials, news & analyst data…");
-  $status.textContent = `Fetching ${ticker}…`;
-
+  showOverlay(`Fetching live data for ${ticker}…`,"Pulling quote, financials, news, analysts…");
+  $status.textContent=`Fetching ${ticker}…`;
   try {
-    const data = await fetchStockData(ticker);
+    const data=await fetchStockData(ticker);
     hideOverlay();
-    const msgEl = addHTML(buildReport(data), "ai", `Finofin · live report — ${ticker}`);
-    const tvId = msgEl.querySelector("[data-tvid]")?.getAttribute("data-tvid");
-    if (tvId) setTimeout(() => renderTVChart(tvId, ticker), 300);
-    $status.textContent = `Report ready — ${ticker}`;
-    addText("Report generated from live data. Enter another company or ask a financial question.", "ai");
-    $input.placeholder = "Enter another ticker, company, or ask a question…";
+    const msgEl=addHTML(buildReport(data),"ai",`Finofin · live report — ${ticker}`);
+    const tvId=msgEl.querySelector("[data-tvid]")?.getAttribute("data-tvid");
+    if(tvId) setTimeout(()=>renderTVChart(tvId,ticker),300);
+    $status.textContent=`Report ready — ${ticker}`;
+    addText("Report generated from live data. Enter another ticker or ask a financial question.","ai");
+    $input.placeholder="Enter another ticker or ask a question…";
   } catch(err) {
     hideOverlay();
-    addHTML(`<div class="err"><b>Error fetching ${ticker}</b><br/>${err.message}</div>`, "ai", "Finofin · error");
-    $status.textContent = "Error — try another ticker";
+    addHTML(`<div class="err"><b>Error fetching ${ticker}</b><br/>${err.message}</div>`,"ai","Finofin · error");
+    $status.textContent="Error — try another ticker";
   }
-  phase = "ready"; unlock();
+  phase="ready"; unlock();
 }
 
 function handleSend() {
-  const val = $input.value.trim();
-  if (!val || $input.disabled) return;
-
-  if (phase === "name") {
-    userName = val; $input.value = ""; addText(userName, "user");
-    $status.textContent = `Hello, ${userName}`;
-    setTimeout(() => {
-      addText(`Hello ${userName}, nice to meet you.`, "ai");
-      setTimeout(() => {
-        addText("I'm Finofin. Enter any stock ticker or company name for a live equity report — large cap, mid cap, or small cap. You can also ask me financial questions like \"what is beta?\" or \"what is a P/E ratio?\"", "ai");
-        $input.placeholder = "Enter a ticker, company name, or ask a question…";
-        $status.textContent = "Ready";
-        phase = "ticker";
-      }, 350);
-    }, 250);
+  const val=$input.value.trim();
+  if(!val||$input.disabled)return;
+  if(phase==="name"){
+    userName=val; $input.value=""; addText(userName,"user");
+    $status.textContent=`Hello, ${userName}`;
+    setTimeout(()=>{
+      addText(`Hello ${userName}, nice to meet you.`,"ai");
+      setTimeout(()=>{
+        addText("I'm Finofin. Enter any stock ticker or company name and I'll pull a full live equity report — price, financials, valuation, news, analyst targets, and interactive chart. You can also ask me financial questions like \"what is beta?\" or \"what is alpha and why does it matter?\"","ai");
+        $input.placeholder="Enter a ticker, company name, or ask a question…";
+        $status.textContent="Ready";
+        phase="ticker";
+      },350);
+    },250);
     return;
   }
-
-  // Check for Q&A first
-  const answer = checkQA(val);
-  if (answer) {
-    addText(val, "user"); $input.value = "";
-    addHTML(`<div class="qa-answer">${answer}</div>`, "ai", "Finofin · knowledge base");
-    return;
-  }
-
+  const answer=checkQA(val);
+  if(answer){ addText(val,"user"); $input.value=""; addHTML(`<div class="qa">${answer}</div>`,"ai","Finofin · knowledge base"); return; }
   handleReport(val);
 }
 
-// ── EVENT LISTENERS ───────────────────────────────────────────────────────────
-$send.addEventListener("click", handleSend);
-$input.addEventListener("keydown", e => { if (e.key === "Enter") handleSend(); });
-
-$enterDoor.addEventListener("click", () => {
-  playDoorCreak();
-  $enterDoor.classList.add("opening");
-  showOverlay("Opening the door…", "Preparing your live data terminal…");
-  setTimeout(() => {
-    hideOverlay();
-    showMain();
-    // Always start fresh greeting when entering
-    initNewConversation();
-  }, 1400);
+$send.addEventListener("click",handleSend);
+$input.addEventListener("keydown",e=>{if(e.key==="Enter")handleSend();});
+$enterDoor.addEventListener("click",()=>{
+  playDoorCreak(); $enterDoor.classList.add("opening");
+  showOverlay("Opening the door…","Preparing your live data terminal…");
+  setTimeout(()=>{ hideOverlay(); showMain(); initNewConversation(); },1400);
+});
+$backDoor.addEventListener("click",()=>showLanding());
+$brandLink.addEventListener("click",()=>showLanding());
+$historyBtn.addEventListener("click",()=>{ $historyPanel.classList.toggle("open"); renderHistoryPanel(); });
+$newChatBtn.addEventListener("click",()=>{
+  if(chats.length>=MAX_CHATS){ alert("Delete a chat first to make room for a new one."); return; }
+  $historyPanel.classList.remove("open"); showMain(); initNewConversation();
+});
+document.addEventListener("click",(e)=>{
+  if(!$historyPanel.contains(e.target)&&e.target!==$historyBtn) $historyPanel.classList.remove("open");
 });
 
-$backDoor.addEventListener("click", () => showLanding());
-$brandLink.addEventListener("click", () => showLanding());
-
-$historyBtn.addEventListener("click", () => {
-  $historyPanel.classList.toggle("open");
-  renderHistoryPanel();
-});
-
-$newChatBtn.addEventListener("click", () => {
-  if (chats.length >= MAX_CHATS) {
-    alert("You have 3 saved chats. Delete one to create a new chat.");
-    return;
-  }
-  $historyPanel.classList.remove("open");
-  showMain();
-  initNewConversation();
-});
-
-// Close history panel when clicking outside
-document.addEventListener("click", (e) => {
-  if (!$historyPanel.contains(e.target) && e.target !== $historyBtn) {
-    $historyPanel.classList.remove("open");
-  }
-});
-
-// Show landing on load
+// Init: show landing
 $landingView.classList.add("active");
 </script>
 </body>
