@@ -243,21 +243,52 @@
 <!-- TOPBAR -->
 <div class="topbar">
   <div class="brand" id="brandLink">
-    <!-- Logo: ff — green line IS the crossbar, flat through each F, movement only between + edges -->
+    <!-- Logo: Option A2 — chrome embossed F's, metallic green crossbar, orange peak dot centered -->
     <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="36" height="36" rx="8" fill="#0c1a2e"/>
-      <!-- Left F: vertical stroke (NO middle bar — green line replaces it) -->
-      <line x1="6" y1="5.5" x2="6" y2="30.5" stroke="rgba(234,244,255,.92)" stroke-width="3" stroke-linecap="round"/>
-      <!-- Left F: top bar -->
-      <line x1="6" y1="5.5" x2="15.5" y2="5.5" stroke="rgba(234,244,255,.92)" stroke-width="3" stroke-linecap="round"/>
-      <!-- Right F: vertical stroke (NO middle bar) -->
-      <line x1="21.5" y1="5.5" x2="21.5" y2="30.5" stroke="rgba(234,244,255,.92)" stroke-width="3" stroke-linecap="round"/>
-      <!-- Right F: top bar -->
-      <line x1="21.5" y1="5.5" x2="31.5" y2="5.5" stroke="rgba(234,244,255,.92)" stroke-width="3" stroke-linecap="round"/>
-      <!-- GREEN LINE: enters from bottom-left, rises → FLAT through left F crossbar zone → dips/rises between → FLAT through right F crossbar zone → rises out top-right -->
-      <polyline
-        points="1.5,27 6,17 15.5,17 17,22.5 18.5,11.5 21.5,17 31.5,17 34,11.5 36,7.5"
-        stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <defs>
+        <linearGradient id="ll_wa" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ffffff"/>
+          <stop offset="30%" stop-color="#f0f8ff"/>
+          <stop offset="65%" stop-color="#ddeeff"/>
+          <stop offset="100%" stop-color="#bbd4ff"/>
+        </linearGradient>
+        <linearGradient id="ll_ga" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#c4f4d8"/>
+          <stop offset="28%" stop-color="#2ecc71"/>
+          <stop offset="62%" stop-color="#1a9e55"/>
+          <stop offset="100%" stop-color="#5dd99a"/>
+        </linearGradient>
+        <radialGradient id="ll_oa" cx="32%" cy="28%" r="68%">
+          <stop offset="0%" stop-color="#ffc87a"/>
+          <stop offset="45%" stop-color="#f07800"/>
+          <stop offset="100%" stop-color="#a84200"/>
+        </radialGradient>
+      </defs>
+      <rect width="36" height="36" rx="8" fill="#060d1a"/>
+      <rect width="36" height="36" rx="8" fill="none" stroke="#152840" stroke-width="1"/>
+      <!-- Left F: chrome emboss — shadow → navy rim → white gradient → specular -->
+      <path d="M7.5 30.5 L7.5 6.5 L17.5 6.5" fill="none" stroke="#020810" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M7.5 30.5 L7.5 6.5 L17.5 6.5" fill="none" stroke="#1a3060" stroke-width="7.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M7.5 30.5 L7.5 6.5 L17.5 6.5" fill="none" stroke="url(#ll_wa)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M7.5 30.5 L7.5 6.5 L17.5 6.5" fill="none" stroke="rgba(255,255,255,0.62)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Right F: same chrome emboss, x=21 gives orange dot center at x≈19.5 -->
+      <path d="M21 30.5 L21 6.5 L31 6.5" fill="none" stroke="#020810" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M21 30.5 L21 6.5 L31 6.5" fill="none" stroke="#1a3060" stroke-width="7.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M21 30.5 L21 6.5 L31 6.5" fill="none" stroke="url(#ll_wa)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M21 30.5 L21 6.5 L31 6.5" fill="none" stroke="rgba(255,255,255,0.62)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Green: FLAT through left F at y=18, dip/peak between, FLAT through right F, rises out -->
+      <polyline points="1.5,33 7.5,18 17.5,18 19,23 19.5,13 21,18 31,18 32.5,13 34.5,8"
+        fill="none" stroke="#001508" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" transform="translate(0.4,1.2)"/>
+      <polyline points="1.5,33 7.5,18 17.5,18 19,23 19.5,13 21,18 31,18 32.5,13 34.5,8"
+        fill="none" stroke="#1a9e5545" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <polyline points="1.5,33 7.5,18 17.5,18 19,23 19.5,13 21,18 31,18 32.5,13 34.5,8"
+        fill="none" stroke="url(#ll_ga)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <polyline points="1.5,33 7.5,18 17.5,18 19,23 19.5,13 21,18 31,18 32.5,13 34.5,8"
+        fill="none" stroke="rgba(210,255,235,0.52)" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Orange peak dot — centered between F's -->
+      <circle cx="19.5" cy="13" r="4" fill="#3d1400" opacity="0.6"/>
+      <circle cx="19.5" cy="13" r="3" fill="url(#ll_oa)"/>
+      <circle cx="18.2" cy="11.8" r="1" fill="rgba(255,235,180,0.9)"/>
     </svg>
     <div><div class="brand-name">Finofin</div><div class="brand-sub">Live Equity Intelligence</div></div>
   </div>
@@ -823,14 +854,11 @@ function playDoorCreak() {
       if (doorAudioCtx.state === "suspended") doorAudioCtx.resume();
       const src = doorAudioCtx.createBufferSource();
       src.buffer = doorAudioBuf;
-      // The file is a closing door — play it in reverse for opening effect
-      src.playbackRate.value = -1;
       src.connect(doorAudioCtx.destination);
-      // Reverse play: offset = duration, when = 0
-      src.start(0, 0, doorAudioBuf.duration);
+      src.start(0);
       return;
     }
-    // Fallback: try creating fresh context and playing directly
+    // Fallback: decode and play directly
     const AC = window.AudioContext || window.webkitAudioContext;
     const ctx = new AC();
     const binary = atob(DOOR_AUDIO_B64);
